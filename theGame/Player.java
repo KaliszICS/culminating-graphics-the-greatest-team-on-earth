@@ -58,8 +58,19 @@ public class Player implements IMovable {
         return this.size;
     }
 
+    @Override
+    public boolean isDeleted() {
+        return false;
+    }
+
+    @Override
     public double getX() {
         return this.xpos;
+    }
+
+    @Override
+    public double getY() {
+        return this.ypos;
     }
 
     public double getTargetY() {
@@ -74,10 +85,6 @@ public class Player implements IMovable {
         return this.targetx;
     }
 
-    public double getY() {
-        return this.ypos;
-    }
-
     public double getSpeed() {
         return this.speed;
     }
@@ -88,6 +95,10 @@ public class Player implements IMovable {
 
     public void setX(double xpos) {
         this.xpos = xpos;
+    }
+
+    public void setY(double ypos) {
+        this.ypos = ypos;
     }
 
     public void setTargetY(double targety) {

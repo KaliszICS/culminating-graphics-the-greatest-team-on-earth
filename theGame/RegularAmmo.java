@@ -1,6 +1,8 @@
 package theGame;
 
 public class RegularAmmo extends Ammo {
+    private int timer;
+
     public RegularAmmo() {
         super.setDamage(5);
         super.setProjSpd(15);
@@ -13,13 +15,25 @@ public class RegularAmmo extends Ammo {
         super.setSize(10);
         super.setDuration(30);
         super.setFireDelay(10);
+        this.timer = (int)super.getDuration();
+    }
+
+    @Override
+    public boolean isDeleted() {
+        if (timer <= 0) {
+            resetTimer();
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void move() {
-        
+        super.setX(super.getX()+super.getXVelocity());
+        super.setY(super.getY()+super.getYVelocity());
     }
 
+    @Override
     public void collide(ICollidable col) {
 
     }
@@ -27,5 +41,13 @@ public class RegularAmmo extends Ammo {
     @Override
     public void upgrade() {
 
+    }
+
+    public void timerDown() {
+        timer--;
+    }
+
+    public void resetTimer() {
+        timer = (int)super.getDuration();
     }
 }

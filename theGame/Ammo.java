@@ -1,6 +1,6 @@
 package theGame;
 
-abstract class Ammo implements IMovable, ICollidable {
+abstract class Ammo implements IMovable, ICollidable, Cloneable {
     private int damage;
     private double projSpd;
     private double recoil;
@@ -14,6 +14,15 @@ abstract class Ammo implements IMovable, ICollidable {
     private int fireDelay;
 
     abstract void upgrade();
+
+    @Override
+    public Object clone(){  
+        try{  
+            return super.clone();  
+        }catch(Exception e){ 
+            return null; 
+    }
+}
 
     @Override
     public double getX() {

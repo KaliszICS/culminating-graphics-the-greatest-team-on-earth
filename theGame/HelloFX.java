@@ -2,10 +2,7 @@ package theGame;
 
 import javafx.application.Application;
 
-import java.awt.Color;
-
 import javafx.animation.*;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
@@ -13,6 +10,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.scene.*;
+import java.util.*;
 
 public class HelloFX extends Application {
     final double BOARD_Y = 400;
@@ -43,15 +41,25 @@ public class HelloFX extends Application {
         rectangle.setWidth(p.getSize()+15);
         rectangle.setHeight(p.getSize()*0.4);
         rectangle.setFill(javafx.scene.paint.Color.RED);
+        ArrayList<IMovable> movables = new ArrayList<IMovable>();
+        ArrayList<Node> sprites = new ArrayList<Node>();
+        Label coords = new Label("xcoord" + p.getX());
+        root.getChildren().add(coords);
         scene.setOnMouseClicked(e -> {
-            
             // if (timer <= 0) {
             //     p.setTargetX(2*p.getX()-e.getX());
             //     p.setTargetY(2*p.getY()-e.getY());
             //     timer = 30;
             // }
             if (p.getReloadCooldown() <= 0) {
-                p.shoot(e.getX(), e.getY());
+                Ammo shot = (Ammo)p.shoot(e.getX(), e.getY()).clone();
+                shot.setX(p.getX());
+                shot.setY(p.getY());
+                shot.setXVelocity(shot.getProjSpd()*Math.cos(rotAngle));
+                shot.setYVelocity(shot.getProjSpd()*Math.sin(rotAngle));
+                movables.add(shot);
+                sprites.add(new Circle(shot.getSize()));
+                root.getChildren().add(sprites.get(sprites.size()-1));
             }
         });
 
@@ -91,6 +99,8 @@ public class HelloFX extends Application {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
+                coords.setText("xcoord:" + p.getX() + " " + p.getY());
+
                 rotAngle = -Math.atan2(mousex-p.getX(), mousey-p.getY())+Math.PI/2;
                 rectangle.setRotate(rotAngle/Math.PI*180);
 
@@ -114,6 +124,20 @@ public class HelloFX extends Application {
 
                 // circle.setCenterX(circle.getCenterX() + dx * 0.1);
                 // circle.setCenterY(circle.getCenterY() + dy * 0.1);
+                for (int i = 0; i < movables.size(); i++) {
+                    movables.get(i).move();
+                    if (movables.get(i) instanceof RegularAmmo) {
+                        ((RegularAmmo)movables.get(i)).timerDown();
+                    }
+                    sprites.get(i).setTranslateX(movables.get(i).getX());
+                    sprites.get(i).setTranslateY(movables.get(i).getY());
+                    if (movables.get(i).isDeleted()) {
+                        root.getChildren().remove(sprites.get(i));
+                        movables.remove(i);
+                        sprites.remove(i);
+                        i--;
+                    }
+                }
                 p.move();
 
                 rectangle.setX(p.getX() + Math.cos(rotAngle)*rectangle.getWidth()/2 - rectangle.getWidth()/2);
