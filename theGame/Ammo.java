@@ -7,8 +7,11 @@ abstract class Ammo implements IMovable, ICollidable {
     private String upgradeable;
     private double xpos;
     private double ypos;
+    private double xvelocity;
+    private double yvelocity;
     private double duration;
     private double size;
+    private int fireDelay;
 
     abstract void upgrade();
 
@@ -20,6 +23,14 @@ abstract class Ammo implements IMovable, ICollidable {
     @Override
     public double getY() {
         return this.ypos;
+    }
+
+    public double getYVelocity() {
+        return yvelocity;
+    }
+
+    public double getXVelocity() {
+        return xvelocity;
     }
 
     public int getDamage() {
@@ -46,12 +57,20 @@ abstract class Ammo implements IMovable, ICollidable {
         return this.size;
     }
 
+    public int getFireDelay() {
+        return this.fireDelay;
+    }
+
     public void setDamage(int damage) {
         this.damage = damage;
     }
 
     public void setUpgradeable(String upgradeable) {
         this.upgradeable = upgradeable;
+    }
+
+    public void setProjSpd(double projSpd) {
+        this.projSpd = projSpd;
     }
 
     public void setRecoil(double recoil) {
@@ -66,6 +85,14 @@ abstract class Ammo implements IMovable, ICollidable {
         this.ypos = ypos;
     }
 
+    public void setXVelocity(double xvelocity) {
+        this.xvelocity = xvelocity;
+    }
+
+    public void setYVelocity(double yvelocity) {
+        this.yvelocity = yvelocity;
+    }
+
     public void setDuration(double duration) {
         this.duration = duration;
     }
@@ -73,5 +100,9 @@ abstract class Ammo implements IMovable, ICollidable {
     public void setSize(double size) {
         this.size = size;
     }
+
+    public void setFireDelay(int fireDelay) {
+        this.fireDelay = fireDelay;
+    } 
 }
 

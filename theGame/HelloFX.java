@@ -44,10 +44,14 @@ public class HelloFX extends Application {
         rectangle.setHeight(p.getSize()*0.4);
         rectangle.setFill(javafx.scene.paint.Color.RED);
         scene.setOnMouseClicked(e -> {
-            if (timer <= 0) {
-                targetX = circle.getCenterX()-(e.getX()-circle.getCenterX());
-                targetY = circle.getCenterY()-(e.getY()-circle.getCenterY());
-                timer = 30;
+            
+            // if (timer <= 0) {
+            //     p.setTargetX(2*p.getX()-e.getX());
+            //     p.setTargetY(2*p.getY()-e.getY());
+            //     timer = 30;
+            // }
+            if (p.getReloadCooldown() <= 0) {
+                p.shoot(e.getX(), e.getY());
             }
         });
 
@@ -87,32 +91,35 @@ public class HelloFX extends Application {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                rotAngle = -Math.atan2(mousex-circle.getCenterX(), mousey-circle.getCenterY())+Math.PI/2;
+                rotAngle = -Math.atan2(mousex-p.getX(), mousey-p.getY())+Math.PI/2;
                 rectangle.setRotate(rotAngle/Math.PI*180);
 
                 timer -= 1;
 
-                if ((targetX <= p.getSize() && circle.getCenterX() <= p.getSize() + 5)) {
-                    targetX = 2 * p.getSize() - targetX;
+                if ((p.getTargetX() <= p.getSize() && p.getX() <= p.getSize() + 5)) {
+                    p.setTargetX(2 * p.getSize() - p.getTargetX());
                 }
-                if ((targetX >= BOARD_X - p.getSize() && circle.getCenterX() >= BOARD_X - p.getSize() - 5)) {
-                    targetX = 2*BOARD_X - 2*p.getSize() - targetX; 
+                if ((p.getTargetX() >= BOARD_X - p.getSize() && p.getX() >= BOARD_X - p.getSize() - 5)) {
+                    p.setTargetX(2*BOARD_X - 2*p.getSize() - p.getTargetX()); 
                 }
-                if ((targetY <= p.getSize() && circle.getCenterY() <= p.getSize() + 5)) {
-                    targetY = 2 * p.getSize() - targetY;
+                if ((p.getTargetY() <= p.getSize() && p.getY() <= p.getSize() + 5)) {
+                    p.setTargetY(2 * p.getSize() - p.getTargetY());
                 }
-                if ((targetY >= BOARD_Y - p.getSize() && circle.getCenterY() >= BOARD_Y - p.getSize() - 5)) {
-                    targetY = 2*BOARD_Y - 2*p.getSize() - targetY; 
+                if ((p.getTargetY() >= BOARD_Y - p.getSize() && p.getY() >= BOARD_Y - p.getSize() - 5)) {
+                    p.setTargetY(2*BOARD_Y - 2*p.getSize() - p.getTargetY()); 
                 }
 
-                double dx = targetX - circle.getCenterX();
-                double dy = targetY - circle.getCenterY();
+                // double dx = targetX - circle.getCenterX();
+                // double dy = targetY - circle.getCenterY();
 
-                circle.setCenterX(circle.getCenterX() + dx * 0.1);
-                circle.setCenterY(circle.getCenterY() + dy * 0.1);
+                // circle.setCenterX(circle.getCenterX() + dx * 0.1);
+                // circle.setCenterY(circle.getCenterY() + dy * 0.1);
+                p.move();
 
-                rectangle.setX(circle.getCenterX() + Math.cos(rotAngle)*rectangle.getWidth()/2 - rectangle.getWidth()/2);
-                rectangle.setY(circle.getCenterY() - 0.5 * rectangle.getHeight() + Math.sin(rotAngle)*rectangle.getWidth()/2);
+                rectangle.setX(p.getX() + Math.cos(rotAngle)*rectangle.getWidth()/2 - rectangle.getWidth()/2);
+                rectangle.setY(p.getY() - 0.5 * rectangle.getHeight() + Math.sin(rotAngle)*rectangle.getWidth()/2);
+                circle.setCenterX(p.getX());
+                circle.setCenterY(p.getY());
 
                 double vert = 0;
                 double horiz = 0;
@@ -133,8 +140,8 @@ public class HelloFX extends Application {
                     horiz /= Math.sqrt(2);
                 }
 
-                targetX += horiz;
-                targetY += vert;
+                p.setTargetX(p.getTargetX() + horiz);
+                p.setTargetY(p.getTargetY() + vert);
             }
         }.start();
 
