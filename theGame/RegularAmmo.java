@@ -14,7 +14,7 @@ public class RegularAmmo extends Ammo {
         super.setY(0);
         super.setSize(size);
         super.setDuration(30);
-        super.setFireDelay(10);
+        super.setFireDelay(20);
         this.timer = (int)super.getDuration();
     }
 
@@ -40,6 +40,11 @@ public class RegularAmmo extends Ammo {
 
     @Override
     public void upgrade() {
+
+    }
+
+    @Override
+    public void applyEffect(Player player) {
 
     }
 

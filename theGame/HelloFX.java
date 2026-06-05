@@ -70,6 +70,7 @@ public class HelloFX extends Application {
         root.getChildren().add(discNum);
         root.getChildren().add(coords);
         ArrayList<Node> cart = new ArrayList<Node>();
+        new Relic(1, 1, "", 1, new ArrayList<>(List.of("Cd_-50", "Rld_-50", "Spd_+50")), "").applyEffect(p);
         scene.setOnMousePressed(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 firing = true;

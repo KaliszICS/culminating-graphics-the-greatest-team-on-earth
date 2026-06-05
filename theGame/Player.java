@@ -1,6 +1,7 @@
 package theGame;
 import java.util.*;
 public class Player implements IMovable {
+    private int iframes;
     private double targetx;
     private double targety;
     private double xpos;
@@ -13,6 +14,9 @@ public class Player implements IMovable {
     private Weapon weapon;
     private ArrayList<Ammo> reserve;
     private ArrayList<Ammo> discard;
+    private double speedMod = 0;
+    private double reloadMod = 0;
+    private double cooldownMod = 0;
 
     public Player() {
         this.targetx = 300;
@@ -40,11 +44,11 @@ public class Player implements IMovable {
     public Ammo shoot(double x, double y) {
         Ammo ammo = this.weapon.shoot();
         discard.add(ammo);
-        this.reloadCooldown = ammo.getFireDelay();
+        this.reloadCooldown = (int)(ammo.getFireDelay()*(1+cooldownMod/100));
         this.targetx -= Math.cos(-Math.atan2(x-this.xpos, y-this.ypos)+Math.PI/2)*ammo.getRecoil();
         this.targety -= Math.sin(-Math.atan2(x-this.xpos, y-this.ypos)+Math.PI/2)*ammo.getRecoil();
         if (this.weapon.getCartridge().size() == 0) {
-            this.reloadCooldown = this.weapon.getReloadSpd();
+            this.reloadCooldown = (int)(this.weapon.getReloadSpd()*(1+reloadMod/100));
             if (!this.weapon.reload(reserve)) {
                 this.reserve.addAll(this.discard);
                 Collections.shuffle(reserve);
@@ -59,7 +63,6 @@ public class Player implements IMovable {
         this.reloadCooldown = 10;
         this.weapon.special();
     }
-
 
     public ArrayList<Ammo> getReserve() {
         return this.reserve;
@@ -126,5 +129,17 @@ public class Player implements IMovable {
 
     public void setTargetX(double targetx) {
         this.targetx = targetx;
+    }
+
+    public void adjustSpdMod(double spdMod) {
+        this.speedMod += spdMod;
+    }
+
+    public void adjustRldMod(double rldMod) {
+        this.reloadMod += rldMod;
+    }
+
+    public void adjustCdMod(double cdMod) {
+        this.cooldownMod += cdMod;
     }
 }

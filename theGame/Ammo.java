@@ -1,6 +1,6 @@
 package theGame;
 
-abstract class Ammo implements IMovable, ICollidable, Cloneable {
+abstract class Ammo extends Item implements IMovable, ICollidable, Cloneable {
     private int damage;
     private double projSpd;
     private double recoil;

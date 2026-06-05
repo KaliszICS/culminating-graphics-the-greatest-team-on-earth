@@ -1,6 +1,6 @@
 package theGame;
 import java.util.*;
-abstract class Item {
+abstract class Item implements IEffectable {
     private int rarity;
     private int type;
     private String name;
