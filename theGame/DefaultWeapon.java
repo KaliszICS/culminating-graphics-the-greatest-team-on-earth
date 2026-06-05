@@ -3,19 +3,19 @@ import java.util.*;
 class DefaultWeapon extends Weapon {
     public DefaultWeapon(ArrayList<Ammo> reserve) {
         super.setName("Original");
-        super.setCapacity(6);
+        super.setCapacity(3);
         super.setReloadSpd(60);
         this.reload(reserve);
     }
     
     @Override
     public Ammo shoot() {
-        return getCartridge().remove(0);
+        return super.getCartridge().remove(0);
     }
 
     @Override
     public void special() {
-        
+        super.getCartridge().add(Math.min(super.getCartridge().size()-1, 1), this.shoot());
     }
 
     @Override

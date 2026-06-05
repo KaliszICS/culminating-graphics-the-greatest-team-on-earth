@@ -24,7 +24,7 @@ public class Player implements IMovable {
         this.size = 25;
         this.speed = 7.5;
         this.discard = new ArrayList<Ammo>();
-        this.reserve = new ArrayList<Ammo>(List.of(new RegularAmmo(), new RegularAmmo(), new RegularAmmo(), new RegularAmmo(), new RegularAmmo(), new RegularAmmo()));
+        this.reserve = new ArrayList<Ammo>(List.of(new RegularAmmo(5), new RegularAmmo(10), new RegularAmmo(15), new RegularAmmo(20), new RegularAmmo(25), new RegularAmmo(30)));
         this.weapon = new DefaultWeapon(reserve);
     }
 
@@ -47,12 +47,31 @@ public class Player implements IMovable {
             this.reloadCooldown = this.weapon.getReloadSpd();
             if (!this.weapon.reload(reserve)) {
                 this.reserve.addAll(this.discard);
+                Collections.shuffle(reserve);
+                this.discard.clear();
                 this.weapon.reload(reserve);
             }
         }
         return ammo;
     }
 
+    public void special() {
+        this.reloadCooldown = 10;
+        this.weapon.special();
+    }
+
+
+    public ArrayList<Ammo> getReserve() {
+        return this.reserve;
+    }
+
+    public ArrayList<Ammo> getCartridge() {
+        return this.weapon.getCartridge();
+    }
+
+    public int getDiscardSize() {
+        return this.discard.size();
+    }
 
     public double getSize() {
         return this.size;

@@ -3,7 +3,7 @@ package theGame;
 public class RegularAmmo extends Ammo {
     private int timer;
 
-    public RegularAmmo() {
+    public RegularAmmo(double size) {
         super.setDamage(5);
         super.setProjSpd(15);
         super.setRecoil(250);
@@ -12,7 +12,7 @@ public class RegularAmmo extends Ammo {
         super.setYVelocity(0);
         super.setX(0);
         super.setY(0);
-        super.setSize(10);
+        super.setSize(size);
         super.setDuration(30);
         super.setFireDelay(10);
         this.timer = (int)super.getDuration();
