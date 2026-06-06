@@ -28,7 +28,7 @@ public class Player implements IMovable {
         this.size = 25;
         this.speed = 7.5;
         this.discard = new ArrayList<Ammo>();
-        this.reserve = new ArrayList<Ammo>(List.of(new RegularAmmo(5), new RegularAmmo(10), new RegularAmmo(15), new RegularAmmo(20), new RegularAmmo(25), new RegularAmmo(30)));
+        this.reserve = new ArrayList<Ammo>(DeckBuilder.starterDeck());
         this.weapon = new DefaultWeapon(reserve);
     }
 
@@ -101,6 +101,10 @@ public class Player implements IMovable {
 
     public double getReloadCooldown() {
         return this.reloadCooldown;
+    }
+
+    public double getReloadTime() {
+        return this.weapon.getReloadSpd();
     }
 
     public double getTargetX() {

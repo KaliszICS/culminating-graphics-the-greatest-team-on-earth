@@ -4,6 +4,8 @@ import javafx.application.Application;
 
 import javafx.animation.*;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
@@ -55,6 +57,7 @@ public class HelloFX extends Application {
         bagNum.setTextFill(Color.WHITE);
         bagNum.setScaleX(3);
         bagNum.setScaleY(3);
+//        ImageView lol = new ImageView("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_2LPYRlundRD0JEWh_Hp5o5T4miDl42J2XQ&s");
         Rectangle disc = new Rectangle(50, 50);
         disc.setX(BOARD_X - 135);
         disc.setY(15);
@@ -64,13 +67,18 @@ public class HelloFX extends Application {
         discNum.setTextFill(Color.WHITE);
         discNum.setScaleX(3);
         discNum.setScaleY(3);
+        Enemy en = new MeleeEnemy();
+        movables.add(en);
+        sprites.add(new Circle(en.getSize()));
+        root.getChildren().add(sprites.get(0));
         root.getChildren().add(bag);
         root.getChildren().add(bagNum);
         root.getChildren().add(disc);
         root.getChildren().add(discNum);
         root.getChildren().add(coords);
-        ArrayList<Node> cart = new ArrayList<Node>();
-        new Relic(1, 1, "", 1, new ArrayList<>(List.of("Cd_-50", "Rld_-50", "Spd_+50")), "").applyEffect(p);
+        // root.getChildren().add(lol);
+        HashMap<Ammo, AmmoDisplayed> cartData = new HashMap<Ammo, AmmoDisplayed>();
+        new Relic(1, 1, "", 1, new ArrayList<>(List.of("Cd_-100", "Rld_-100", "Spd_+50")), "").applyEffect(p);
         scene.setOnMousePressed(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 firing = true;
@@ -132,8 +140,24 @@ public class HelloFX extends Application {
                 discNum.setText(""+p.getDiscardSize());
                 coords.setText("xcoord:" + p.getX() + " " + p.getY());
                 
+                for (int i = 0; i < p.getCartridge().size(); i++) {
+                    if (cartData.get(p.getCartridge().get(i)) == null) {
+                        cartData.put(p.getCartridge().get(i), new AmmoDisplayed(BOARD_X-60, 40, p.getCartridge().get(i), p.getReloadTime()));
+                        root.getChildren().add(cartData.get(p.getCartridge().get(i)).getShape());
+                    }
+                    cartData.get(p.getCartridge().get(i)).setTargetX(BOARD_X - 60);
+                    cartData.get(p.getCartridge().get(i)).setTargetY(15*i + 70);
+                    cartData.get(p.getCartridge().get(i)).move();
+                }
+
                 if (firing && p.getReloadCooldown() <= 0) {
-                    Ammo shot = (Ammo)p.shoot(mousex, mousey).clone();
+                    Ammo temp = p.shoot(mousex, mousey);
+                    movables.add(new AmmoDisplayed(cartData.get(temp).getX(), cartData.get(temp).getY(), BOARD_X-130, 30));
+                    sprites.add(((AmmoDisplayed)movables.get(movables.size()-1)).getShape());
+                    root.getChildren().add(sprites.get(sprites.size()-1));
+                    root.getChildren().remove(cartData.get(temp).getShape());
+                    cartData.remove(temp);
+                    Ammo shot = (Ammo)temp.clone();
                     shot.setX(p.getX());
                     shot.setY(p.getY());
                     shot.setXVelocity(shot.getProjSpd()*Math.cos(rotAngle));
@@ -145,14 +169,25 @@ public class HelloFX extends Application {
                     p.special();
                 }
 
-                for (int i = cart.size(); i > p.getCartridge().size(); i--) {
-                    root.getChildren().remove(cart.remove(i-1));
-                }
+                // for (int i = cart.size(); i > p.getCartridge().size(); i--) {
+                //     root.getChildren().remove(cart.remove(i-1));
+                //     cartData.remove(i-1);
+                // }
 
-                for (int i = cart.size(); i < p.getCartridge().size(); i++) {
-                    cart.add(new Rectangle(BOARD_X - 60, 15*i + 70, 40, 10));
-                    root.getChildren().add(cart.get(i));
-                }
+                // for (int i = cart.size(); i < p.getCartridge().size(); i++) {
+                //     cartData.add(new AmmoDisplayed(BOARD_X-60, 40, p.getCartridge().get(i), p.getReloadTime()));
+                //     cart.add(new Rectangle(40, 10));
+                //     cartData.get(i).setTargetX(BOARD_X - 60);
+                //     cartData.get(i).setTargetY(15*i + 70);
+                //     root.getChildren().add(cart.get(i));
+                // }
+
+
+                // for (int i = 0; i < cart.size(); i++) {
+                //     cartData.get(i).move();
+                //     cart.get(i).setTranslateX(cartData.get(i).getX());
+                //     cart.get(i).setTranslateY(cartData.get(i).getY());
+                // }
 
                 rotAngle = -Math.atan2(mousex-p.getX(), mousey-p.getY())+Math.PI/2;
                 rectangle.setRotate(rotAngle/Math.PI*180);
@@ -179,6 +214,9 @@ public class HelloFX extends Application {
                     movables.get(i).move();
                     if (movables.get(i) instanceof RegularAmmo) {
                         ((RegularAmmo)movables.get(i)).timerDown();
+                    } else if (movables.get(i) instanceof MeleeEnemy) {
+                        ((MeleeEnemy)movables.get(i)).setTargetX(p.getX());
+                        ((MeleeEnemy)movables.get(i)).setTargetY(p.getY());
                     }
                     sprites.get(i).setTranslateX(movables.get(i).getX());
                     sprites.get(i).setTranslateY(movables.get(i).getY());
@@ -195,6 +233,8 @@ public class HelloFX extends Application {
                 rectangle.setY(p.getY() - 0.5 * rectangle.getHeight() + Math.sin(rotAngle)*rectangle.getWidth()/2);
                 circle.setCenterX(p.getX());
                 circle.setCenterY(p.getY());
+                // lol.setX(p.getX());
+                // lol.setY(p.getY());
 
                 double vert = 0;
                 double horiz = 0;

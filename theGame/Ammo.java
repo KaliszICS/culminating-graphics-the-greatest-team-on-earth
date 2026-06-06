@@ -21,8 +21,8 @@ abstract class Ammo extends Item implements IMovable, ICollidable, Cloneable {
             return super.clone();  
         }catch(Exception e){ 
             return null; 
+        }
     }
-}
 
     @Override
     public double getX() {

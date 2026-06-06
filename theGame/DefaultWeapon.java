@@ -3,7 +3,7 @@ import java.util.*;
 class DefaultWeapon extends Weapon {
     public DefaultWeapon(ArrayList<Ammo> reserve) {
         super.setName("Original");
-        super.setCapacity(3);
+        super.setCapacity(6);
         super.setReloadSpd(60);
         this.reload(reserve);
     }
@@ -20,7 +20,7 @@ class DefaultWeapon extends Weapon {
 
     @Override
     public boolean reload(ArrayList<Ammo> reserve) {
-        for (int i = 0; i < super.getCapacity() && reserve.size() > 0; i++) {
+        for (int i = super.getCartridge().size(); i < super.getCapacity() && reserve.size() > 0; i++) {
             super.getCartridge().add(reserve.remove(0));
         }
         return !(reserve.size() == 0 && super.getCartridge().size() != super.getCapacity());

@@ -3,18 +3,18 @@ package theGame;
 public class RegularAmmo extends Ammo {
     private int timer;
 
-    public RegularAmmo(double size) {
-        super.setDamage(5);
-        super.setProjSpd(15);
-        super.setRecoil(250);
-        super.setUpgradeable("dmg 5");
+    public RegularAmmo(int damage, double projSpd, double recoil, String upgradeable, double size, double duration, int fireDelay) {
+        super.setDamage(damage);
+        super.setProjSpd(projSpd);
+        super.setRecoil(recoil);
+        super.setUpgradeable(upgradeable);
         super.setXVelocity(0);
         super.setYVelocity(0);
         super.setX(0);
         super.setY(0);
         super.setSize(size);
-        super.setDuration(30);
-        super.setFireDelay(20);
+        super.setDuration(duration);
+        super.setFireDelay(fireDelay);
         this.timer = (int)super.getDuration();
     }
 
