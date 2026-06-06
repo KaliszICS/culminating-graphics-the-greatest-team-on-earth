@@ -1,6 +1,9 @@
 package theGame;
 
+import java.util.*;
+
 public class MeleeEnemy extends Enemy {
+    private ArrayList<ICollidable> immunityList = new ArrayList<ICollidable>();
 
     public MeleeEnemy() {
         super.setHp(50);
@@ -9,8 +12,12 @@ public class MeleeEnemy extends Enemy {
     }
 
     @Override
-    public void collide(ICollidable a) {
-
+    public void collide(ICollidable col) {
+        if (!immunityList.contains(col)) {
+            super.takeDamage(col.getDmg());
+        } else {
+            immunityList.add(col);
+        }
     }
 
     @Override

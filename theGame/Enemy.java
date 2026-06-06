@@ -68,6 +68,7 @@ abstract class Enemy implements IMovable, ICollidable {
         return this.hp;
     }
 
+    @Override
     public int getDmg() {
         return this.dmg;
     }
@@ -94,6 +95,7 @@ abstract class Enemy implements IMovable, ICollidable {
         return this.spd;
     }
 
+    @Override
     public double getSize() {
         return this.size;
     }

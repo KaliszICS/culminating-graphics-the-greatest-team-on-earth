@@ -42,7 +42,8 @@ abstract class Ammo extends Item implements IMovable, ICollidable, Cloneable {
         return xvelocity;
     }
 
-    public int getDamage() {
+    @Override
+    public int getDmg() {
         return this.damage;
     }
 
@@ -62,6 +63,7 @@ abstract class Ammo extends Item implements IMovable, ICollidable, Cloneable {
         return this.duration;
     }
 
+    @Override
     public double getSize() {
         return this.size;
     }

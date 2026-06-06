@@ -2,6 +2,7 @@ package theGame;
 
 public class RegularAmmo extends Ammo {
     private int timer;
+    private int pierce = 0;
 
     public RegularAmmo(int damage, double projSpd, double recoil, String upgradeable, double size, double duration, int fireDelay) {
         super.setDamage(damage);
@@ -24,7 +25,7 @@ public class RegularAmmo extends Ammo {
             resetTimer();
             return true;
         }
-        return false;
+        return pierce <= -1;
     }
 
     @Override
@@ -35,7 +36,7 @@ public class RegularAmmo extends Ammo {
 
     @Override
     public void collide(ICollidable col) {
-
+        pierce--;
     }
 
     @Override

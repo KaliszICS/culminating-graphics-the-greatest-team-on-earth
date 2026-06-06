@@ -46,6 +46,7 @@ public class HelloFX extends Application {
         rectangle.setWidth(p.getSize()+15);
         rectangle.setHeight(p.getSize()*0.4);
         ArrayList<IMovable> movables = new ArrayList<IMovable>();
+        ArrayList<ICollidable> collidables = new ArrayList<ICollidable>();
         ArrayList<Node> sprites = new ArrayList<Node>();
         Label coords = new Label("xcoord" + p.getX());
         Rectangle bag = new Rectangle(50, 50);
@@ -68,6 +69,7 @@ public class HelloFX extends Application {
         discNum.setScaleX(3);
         discNum.setScaleY(3);
         Enemy en = new MeleeEnemy();
+        collidables.add(en);
         movables.add(en);
         sprites.add(new Circle(en.getSize()));
         root.getChildren().add(sprites.get(0));
@@ -163,6 +165,7 @@ public class HelloFX extends Application {
                     shot.setXVelocity(shot.getProjSpd()*Math.cos(rotAngle));
                     shot.setYVelocity(shot.getProjSpd()*Math.sin(rotAngle));
                     movables.add(shot);
+                    collidables.add(shot);
                     sprites.add(new Circle(shot.getSize()));
                     root.getChildren().add(sprites.get(sprites.size()-1));
                 } else if (specialing && p.getReloadCooldown() <= 0) {
@@ -221,10 +224,27 @@ public class HelloFX extends Application {
                     sprites.get(i).setTranslateX(movables.get(i).getX());
                     sprites.get(i).setTranslateY(movables.get(i).getY());
                     if (movables.get(i).isDeleted()) {
+                        collidables.remove(movables.get(i));
                         root.getChildren().remove(sprites.get(i));
                         movables.remove(i);
                         sprites.remove(i);
                         i--;
+                    }
+                }
+                for (int i = 0; i < collidables.size(); i++) {
+                    for (int j = i+1; j < collidables.size(); j++) {
+                        if ((collidables.get(i).getClass()) != (collidables.get(j).getClass())) {
+                            if (
+                                collidables.get(i).getSize() + collidables.get(j).getSize() >=
+                                Math.sqrt(
+                                    Math.pow(collidables.get(i).getX()-collidables.get(j).getX(), 2) +
+                                    Math.pow(collidables.get(i).getY()-collidables.get(j).getY(), 2)
+                                )
+                            ) {
+                                collidables.get(i).collide(collidables.get(j));
+                                collidables.get(j).collide(collidables.get(i));
+                            }
+                        }
                     }
                 }
                 p.move();
