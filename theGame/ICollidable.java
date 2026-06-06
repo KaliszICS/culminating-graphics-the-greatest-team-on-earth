@@ -1,5 +1,5 @@
 package theGame;
-public interface ICollidable {
+public interface ICollidable extends IMovable {
     double getX();
     double getY();
     double getSize();

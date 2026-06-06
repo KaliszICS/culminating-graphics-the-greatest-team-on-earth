@@ -4,8 +4,6 @@ import javafx.application.Application;
 
 import javafx.animation.*;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
@@ -71,7 +69,7 @@ public class HelloFX extends Application {
         Enemy en = new MeleeEnemy();
         collidables.add(en);
         movables.add(en);
-        sprites.add(new Circle(en.getSize()));
+        sprites.add(en.getShape());
         root.getChildren().add(sprites.get(0));
         root.getChildren().add(bag);
         root.getChildren().add(bagNum);
@@ -80,7 +78,7 @@ public class HelloFX extends Application {
         root.getChildren().add(coords);
         // root.getChildren().add(lol);
         HashMap<Ammo, AmmoDisplayed> cartData = new HashMap<Ammo, AmmoDisplayed>();
-        new Relic(1, 1, "", 1, new ArrayList<>(List.of("Cd_-100", "Rld_-100", "Spd_+50")), "").applyEffect(p);
+        // new Relic(1, 1, "", 1, new ArrayList<>(List.of("Cd_-100", "Rld_-100", "Spd_+50")), "").applyEffect(p);
         scene.setOnMousePressed(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 firing = true;
@@ -243,6 +241,17 @@ public class HelloFX extends Application {
                             ) {
                                 collidables.get(i).collide(collidables.get(j));
                                 collidables.get(j).collide(collidables.get(i));
+                                if (collidables.get(i) instanceof Enemy) {
+                                    DamageNumber num = new DamageNumber(collidables.get(i).getX(), collidables.get(i).getY(), collidables.get(j).getDmg());
+                                    movables.add(num);
+                                    sprites.add(num.getShape());
+                                    root.getChildren().add(num.getShape());
+                                } else if (collidables.get(j) instanceof Enemy) {
+                                    DamageNumber num = new DamageNumber(collidables.get(j).getX(), collidables.get(j).getY(), collidables.get(i).getDmg());
+                                    movables.add(num);
+                                    sprites.add(num.getShape());
+                                    root.getChildren().add(num.getShape());
+                                }
                             }
                         }
                     }

@@ -1,6 +1,8 @@
 package theGame;
+import javafx.scene.shape.*;
 
-abstract class Enemy implements IMovable, ICollidable {
+abstract class Enemy implements ICollidable {
+    private Shape sprite;
     private String name;
     private int value;
     private int hp;
@@ -56,6 +58,10 @@ abstract class Enemy implements IMovable, ICollidable {
         this.size = size;
     }
 
+    public void setShape(Shape sprite) {
+        this.sprite = sprite;
+    }
+
     public String getName() {
         return this.name;
     }
@@ -98,5 +104,9 @@ abstract class Enemy implements IMovable, ICollidable {
     @Override
     public double getSize() {
         return this.size;
+    }
+
+    public Shape getShape() {
+        return this.sprite;
     }
 }
