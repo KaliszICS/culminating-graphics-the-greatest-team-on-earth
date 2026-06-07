@@ -1,7 +1,8 @@
 package theGame;
 import java.util.*;
-public class Player implements IMovable {
-    private int iframes;
+public class Player implements ICollidable {
+    private int thorns = 1;
+    private int iframes = 0;
     private double targetx;
     private double targety;
     private double xpos;
@@ -32,8 +33,16 @@ public class Player implements IMovable {
         this.weapon = new DefaultWeapon(reserve);
     }
 
+    public void collide (ICollidable col) {
+        if (this.iframes <= 0 && col.getFriend()!=Player.class) {
+            this.iframes = 30;
+            this.takeDamage(col.getDmg());
+        }
+    }
+
     @Override
     public void move() {
+        this.iframes--;
         this.reloadCooldown--;
         double dx = this.targetx - this.xpos;
         double dy = this.targety - this.ypos;
@@ -43,6 +52,7 @@ public class Player implements IMovable {
 
     public Ammo shoot(double x, double y) {
         Ammo ammo = this.weapon.shoot();
+        ammo.setFriend(Player.class);
         discard.add(ammo);
         this.reloadCooldown = (int)(ammo.getFireDelay()*(1+cooldownMod/100));
         this.targetx -= Math.cos(-Math.atan2(x-this.xpos, y-this.ypos)+Math.PI/2)*ammo.getRecoil();
@@ -59,9 +69,26 @@ public class Player implements IMovable {
         return ammo;
     }
 
+    @Override
+    public Class<? extends ICollidable> getFriend () {
+        return Player.class;
+    }
+
     public void special() {
         this.reloadCooldown = 10;
         this.weapon.special();
+    }
+
+    public void takeDamage(int dmg) {
+        hp -= dmg;
+    }
+
+    @Override
+    public boolean isImmune(ICollidable col) {
+        if (col.getFriend() == Player.class) {
+            return true;
+        }
+        return iframes > 0;
     }
 
     public ArrayList<Ammo> getReserve() {
@@ -76,6 +103,11 @@ public class Player implements IMovable {
         return this.discard.size();
     }
 
+    public int getDmg() {
+        return thorns;
+    }
+
+    @Override
     public double getSize() {
         return this.size;
     }

@@ -12,11 +12,12 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.scene.*;
+import javafx.scene.image.*;
 import java.util.*;
 
 public class HelloFX extends Application {
-    final double BOARD_Y = 400;
-    final double BOARD_X = 600;
+    final double BOARD_Y = 600;
+    final double BOARD_X = 1000;
     double targetX = BOARD_X/2;
     double targetY = BOARD_Y/2;
     boolean movingUp = false;
@@ -45,6 +46,7 @@ public class HelloFX extends Application {
         rectangle.setHeight(p.getSize()*0.4);
         ArrayList<IMovable> movables = new ArrayList<IMovable>();
         ArrayList<ICollidable> collidables = new ArrayList<ICollidable>();
+        collidables.add(p);
         ArrayList<Node> sprites = new ArrayList<Node>();
         Label coords = new Label("xcoord" + p.getX());
         Rectangle bag = new Rectangle(50, 50);
@@ -66,11 +68,14 @@ public class HelloFX extends Application {
         discNum.setTextFill(Color.WHITE);
         discNum.setScaleX(3);
         discNum.setScaleY(3);
-        Enemy en = new MeleeEnemy();
-        collidables.add(en);
-        movables.add(en);
-        sprites.add(en.getShape());
-        root.getChildren().add(sprites.get(0));
+        // Enemy en = new MeleeEnemy(5, 50, 5, 30);
+        for (int i = 0; i < 15; i++) {
+            Enemy en = new GameRound().generateEnemy();
+            collidables.add(en);
+            movables.add(en);
+            sprites.add(en.getShape());
+            root.getChildren().add(sprites.get(sprites.size()-1));
+        }
         root.getChildren().add(bag);
         root.getChildren().add(bagNum);
         root.getChildren().add(disc);
@@ -170,26 +175,6 @@ public class HelloFX extends Application {
                     p.special();
                 }
 
-                // for (int i = cart.size(); i > p.getCartridge().size(); i--) {
-                //     root.getChildren().remove(cart.remove(i-1));
-                //     cartData.remove(i-1);
-                // }
-
-                // for (int i = cart.size(); i < p.getCartridge().size(); i++) {
-                //     cartData.add(new AmmoDisplayed(BOARD_X-60, 40, p.getCartridge().get(i), p.getReloadTime()));
-                //     cart.add(new Rectangle(40, 10));
-                //     cartData.get(i).setTargetX(BOARD_X - 60);
-                //     cartData.get(i).setTargetY(15*i + 70);
-                //     root.getChildren().add(cart.get(i));
-                // }
-
-
-                // for (int i = 0; i < cart.size(); i++) {
-                //     cartData.get(i).move();
-                //     cart.get(i).setTranslateX(cartData.get(i).getX());
-                //     cart.get(i).setTranslateY(cartData.get(i).getY());
-                // }
-
                 rotAngle = -Math.atan2(mousex-p.getX(), mousey-p.getY())+Math.PI/2;
                 rectangle.setRotate(rotAngle/Math.PI*180);
 
@@ -239,18 +224,21 @@ public class HelloFX extends Application {
                                     Math.pow(collidables.get(i).getY()-collidables.get(j).getY(), 2)
                                 )
                             ) {
-                                collidables.get(i).collide(collidables.get(j));
-                                collidables.get(j).collide(collidables.get(i));
-                                if (collidables.get(i) instanceof Enemy) {
-                                    DamageNumber num = new DamageNumber(collidables.get(i).getX(), collidables.get(i).getY(), collidables.get(j).getDmg());
-                                    movables.add(num);
-                                    sprites.add(num.getShape());
-                                    root.getChildren().add(num.getShape());
-                                } else if (collidables.get(j) instanceof Enemy) {
-                                    DamageNumber num = new DamageNumber(collidables.get(j).getX(), collidables.get(j).getY(), collidables.get(i).getDmg());
-                                    movables.add(num);
-                                    sprites.add(num.getShape());
-                                    root.getChildren().add(num.getShape());
+                                if (!collidables.get(i).isImmune(collidables.get(j)) && !collidables.get(j).isImmune(collidables.get(i))) {
+                                    if (!(collidables.get(i) instanceof Ammo)) {
+                                        DamageNumber num = new DamageNumber(collidables.get(i).getX(), collidables.get(i).getY(), collidables.get(j).getDmg());
+                                        movables.add(num);
+                                        sprites.add(num.getShape());
+                                        root.getChildren().add(num.getShape());
+                                    }
+                                    collidables.get(i).collide(collidables.get(j));
+                                    if (!(collidables.get(j) instanceof Ammo)) {
+                                        DamageNumber num = new DamageNumber(collidables.get(j).getX(), collidables.get(j).getY(), collidables.get(i).getDmg());
+                                        movables.add(num);
+                                        sprites.add(num.getShape());
+                                        root.getChildren().add(num.getShape());
+                                    }
+                                    collidables.get(j).collide(collidables.get(i));
                                 }
                             }
                         }

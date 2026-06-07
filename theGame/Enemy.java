@@ -14,6 +14,11 @@ abstract class Enemy implements ICollidable {
     private double spd;
     private double size;
 
+    @Override
+    public Class<? extends ICollidable> getFriend () {
+        return Enemy.class;
+    }
+
     public void takeDamage(int damage) {
         this.hp -= damage;
     }

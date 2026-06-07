@@ -5,4 +5,6 @@ public interface ICollidable extends IMovable {
     double getSize();
     int getDmg();
     void collide(ICollidable a);
+    Class<? extends ICollidable> getFriend();
+    boolean isImmune(ICollidable a);
 }

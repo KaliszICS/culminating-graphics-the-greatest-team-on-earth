@@ -12,6 +12,7 @@ abstract class Ammo extends Item implements ICollidable, Cloneable {
     private double duration;
     private double size;
     private int fireDelay;
+    private Class<? extends ICollidable> friendly;
 
     abstract void upgrade();
 
@@ -22,6 +23,11 @@ abstract class Ammo extends Item implements ICollidable, Cloneable {
         }catch(Exception e){ 
             return null; 
         }
+    }
+
+    @Override
+    public Class<? extends ICollidable> getFriend () {
+        return friendly;
     }
 
     @Override
@@ -115,5 +121,9 @@ abstract class Ammo extends Item implements ICollidable, Cloneable {
     public void setFireDelay(int fireDelay) {
         this.fireDelay = fireDelay;
     } 
+
+    public void setFriend(Class<? extends ICollidable> friendly) {
+        this.friendly = friendly;
+    }
 }
 
