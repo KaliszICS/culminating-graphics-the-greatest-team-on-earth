@@ -15,28 +15,38 @@ public class GameRound {
     private Label timer;
     private ArrayList<Enemy> enemies;
     private ArrayList<Integer> timers;
-
+    private double[][] spawnLocations;
 
     public GameRound() {
         this.wave = 10;
         this.difficulty = 5;
-        this.time = 21*60+60*this.wave*this.difficulty;
-        this.currentTime = 20*60+60*this.wave;
-        this.totalPoints = 10+5*this.wave*this.difficulty;
+        this.time = 21*60+30*this.wave;
+        this.currentTime = this.time;
+        this.totalPoints = 10+25*this.wave*this.difficulty;
         this.timer = new Label();
         this.timer.setTranslateY(30);
         this.timer.setTranslateX(500);
         this.timer.setScaleX(5);
         this.timer.setScaleY(5);
         this.generateWave();
-        this.generateSpawnTimers(enemies.size());
+        this.generateSpawnTimers(this.enemies.size());
+        this.spawnLocations = new double[this.enemies.size()][2];
     }
 
     public void spawnEnemies(Pane root, ArrayList<Node> sprites, ArrayList<IMovable> movables, ArrayList<ICollidable> collidables) {
         this.currentTime--;
         this.timer.setText(""+(int)Math.floor(currentTime/60));
         for (int i = 0; i < this.timers.size(); i++) {
-            if (this.currentTime == this.timers.get(i)) {
+            if (this.currentTime == this.timers.get(i) + 60) {
+                double spawnx = Math.random()*1000;
+                double spawny = Math.random()*600;
+                SpawnIndicator temp = new SpawnIndicator(spawnx, spawny);
+                movables.add(temp);
+                sprites.add(temp.getShape());
+                root.getChildren().add(temp.getShape());
+                this.enemies.get(i).setX(spawnx);
+                this.enemies.get(i).setY(spawny);
+            } else if (this.currentTime == this.timers.get(i)) {
                 collidables.add(this.enemies.get(i));
                 movables.add(this.enemies.get(i));
                 sprites.add(this.enemies.get(i).getShape());
@@ -51,7 +61,7 @@ public class GameRound {
 
     public void generateSpawnTimers(int num) {
         ArrayList<Integer> probabilities = new ArrayList<Integer>();
-        for (int i = 0; i < this.time; i++) {
+        for (int i = 0; i < this.time - 60; i++) {
             // for (int j = 0; j < 5 * Math.sin(3*(((double)i/this.time)*(9*Math.PI/2))) + 5; j++) {
             //     probabilities.add(i);
             // }
@@ -84,8 +94,6 @@ public class GameRound {
         double spd = 1+0.2*pointDistribution[2];
         double size = 30*Math.pow(1.05, pointDistribution[3]);
         Enemy en = new MeleeEnemy(dmg, hp, spd, size);
-        en.setX(Math.random()*1000);
-        en.setY(Math.random()*600);
         return en;
     }
 

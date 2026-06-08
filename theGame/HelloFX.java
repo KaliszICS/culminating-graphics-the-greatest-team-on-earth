@@ -70,13 +70,6 @@ public class HelloFX extends Application {
         discNum.setScaleY(3);
         GameRound round = new GameRound();
         root.getChildren().add(round.getTimer());
-        // for (int i = 0; i < enemies.size(); i++) {
-        //     Enemy en = enemies.get(i);
-        //     collidables.add(en);
-        //     movables.add(en);
-        //     sprites.add(en.getShape());
-        //     root.getChildren().add(sprites.get(sprites.size()-1));
-        // }
         root.getChildren().add(bag);
         root.getChildren().add(bagNum);
         root.getChildren().add(disc);
@@ -192,12 +185,6 @@ public class HelloFX extends Application {
                 if ((p.getTargetY() >= BOARD_Y - p.getSize() && p.getY() >= BOARD_Y - p.getSize() - 5)) {
                     p.setTargetY(2*BOARD_Y - 2*p.getSize() - p.getTargetY()); 
                 }
-
-                // double dx = targetX - circle.getCenterX();
-                // double dy = targetY - circle.getCenterY();
-
-                // circle.setCenterX(circle.getCenterX() + dx * 0.1);
-                // circle.setCenterY(circle.getCenterY() + dy * 0.1);
                 for (int i = 0; i < movables.size(); i++) {
                     movables.get(i).move();
                     if (movables.get(i) instanceof RegularAmmo) {
@@ -252,8 +239,6 @@ public class HelloFX extends Application {
                 rectangle.setY(p.getY() - 0.5 * rectangle.getHeight() + Math.sin(rotAngle)*rectangle.getWidth()/2);
                 circle.setCenterX(p.getX());
                 circle.setCenterY(p.getY());
-                // lol.setX(p.getX());
-                // lol.setY(p.getY());
 
                 double vert = 0;
                 double horiz = 0;
