@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class RegularAmmo extends Ammo {
     private int timer;
-    private int pierce = 0;
+    private int pierce = 200;
     private ArrayList<ICollidable> immunityList = new ArrayList<ICollidable>();
     HashMap<ICollidable, Integer> immunityTimers = new HashMap<ICollidable, Integer>();
 

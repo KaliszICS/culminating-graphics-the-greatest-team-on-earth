@@ -68,14 +68,15 @@ public class HelloFX extends Application {
         discNum.setTextFill(Color.WHITE);
         discNum.setScaleX(3);
         discNum.setScaleY(3);
-        // Enemy en = new MeleeEnemy(5, 50, 5, 30);
-        for (int i = 0; i < 15; i++) {
-            Enemy en = new GameRound().generateEnemy();
-            collidables.add(en);
-            movables.add(en);
-            sprites.add(en.getShape());
-            root.getChildren().add(sprites.get(sprites.size()-1));
-        }
+        GameRound round = new GameRound();
+        root.getChildren().add(round.getTimer());
+        // for (int i = 0; i < enemies.size(); i++) {
+        //     Enemy en = enemies.get(i);
+        //     collidables.add(en);
+        //     movables.add(en);
+        //     sprites.add(en.getShape());
+        //     root.getChildren().add(sprites.get(sprites.size()-1));
+        // }
         root.getChildren().add(bag);
         root.getChildren().add(bagNum);
         root.getChildren().add(disc);
@@ -144,6 +145,7 @@ public class HelloFX extends Application {
                 bagNum.setText(""+p.getReserve().size());
                 discNum.setText(""+p.getDiscardSize());
                 coords.setText("xcoord:" + p.getX() + " " + p.getY());
+                round.spawnEnemies(root, sprites, movables, collidables);
                 
                 for (int i = 0; i < p.getCartridge().size(); i++) {
                     if (cartData.get(p.getCartridge().get(i)) == null) {

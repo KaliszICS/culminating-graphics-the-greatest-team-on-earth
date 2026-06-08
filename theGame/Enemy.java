@@ -1,5 +1,6 @@
 package theGame;
 import javafx.scene.shape.*;
+import java.util.*;
 
 abstract class Enemy implements ICollidable {
     private Shape sprite;
@@ -13,6 +14,34 @@ abstract class Enemy implements ICollidable {
     private double targetY;
     private double spd;
     private double size;
+    private ArrayList<ICollidable> immunityList = new ArrayList<ICollidable>();
+    private HashMap<ICollidable, Integer> immunityTimers = new HashMap<ICollidable, Integer>();
+    private double realspd;
+    private int damageTimer = 0;
+
+    @Override
+    public void collide(ICollidable col) {
+        if (!this.immunityList.contains(col)) {
+            this.realspd = 0;
+            this.damageTimer = 10;
+            this.takeDamage(col.getDmg());
+            this.immunityList.add(col);
+            this.immunityTimers.put(col, 30);
+        }
+    }
+
+    @Override
+    public boolean isImmune(ICollidable col) {
+        if (col.getFriend() == Enemy.class) {
+            return true;
+        }
+        return this.immunityList.contains(col);
+    }
+
+    @Override
+    public boolean isDeleted() {
+        return this.hp <= 0;
+    }
 
     @Override
     public Class<? extends ICollidable> getFriend () {
@@ -113,5 +142,29 @@ abstract class Enemy implements ICollidable {
 
     public Shape getShape() {
         return this.sprite;
+    }
+
+    public double getRealSpeed() {
+        return this.realspd;
+    }
+
+    public void setRealSpeed(double realspd) {
+        this.realspd = realspd;
+    }
+
+    public ArrayList<ICollidable> getImmunityList() {
+        return this.immunityList;
+    }
+
+    public HashMap<ICollidable, Integer> getImmunityTimers() {
+        return this.immunityTimers;
+    }
+
+    public int getDamageTimer() {
+        return this.damageTimer;
+    }
+
+    public void decreaseDamageTimer() {
+        this.damageTimer--;
     }
 }
