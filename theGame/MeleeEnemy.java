@@ -37,7 +37,7 @@ public class MeleeEnemy extends Enemy {
             }
         }
         double rotAngle = -Math.atan2(this.targetX-this.xpos, this.targetY-this.ypos)+Math.PI/2;
-        this.xpos = this.realspd*Math.cos(rotAngle);
-        this.ypos = this.realspd*Math.sin(rotAngle);
+        this.xpos += this.realspd*Math.cos(rotAngle);
+        this.ypos += this.realspd*Math.sin(rotAngle);
     }
 }
