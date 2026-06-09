@@ -3,18 +3,18 @@ package theGame;
 import javafx.scene.image.*;
 
 abstract class Ammo extends Item implements ICollidable, Cloneable {
-    private int damage;
-    private double projSpd;
-    private double recoil;
-    private String upgradeable;
-    private double xpos;
-    private double ypos;
-    private double xvelocity;
-    private double yvelocity;
-    private double duration;
-    private double size;
-    private int fireDelay;
-    private Class<? extends ICollidable> friendly;
+    protected int damage;
+    protected double projSpd;
+    protected double recoil;
+    protected String upgradeable;
+    protected double xpos;
+    protected double ypos;
+    protected double xvelocity;
+    protected double yvelocity;
+    protected double duration;
+    protected double size;
+    protected int fireDelay;
+    protected Class<? extends ICollidable> friendly;
 
     abstract void upgrade();
 

@@ -1,4 +1,4 @@
 package theGame;
-interface IEffectable {
+interface IEffectable { // remove
     void applyEffect(Player player, String condition);
 }

@@ -19,6 +19,7 @@ public class Player implements ICollidable {
     private double speedMod = 0;
     private double reloadMod = 0;
     private double cooldownMod = 0;
+    public final Ammo[] ALL_AMMO = ItemLoader.loadAll();
 
     public Player() {
         this.targetx = 300;
@@ -30,7 +31,7 @@ public class Player implements ICollidable {
         this.size = 25;
         this.speed = 7.5;
         this.discard = new ArrayList<Ammo>();
-        this.reserve = new ArrayList<Ammo>(DeckBuilder.testDeck());
+        this.reserve = new ArrayList<Ammo>(DeckBuilder.testDeck(ALL_AMMO));
         this.weapon = new DefaultWeapon(reserve);
     }
 
@@ -54,7 +55,7 @@ public class Player implements ICollidable {
     public Ammo shoot(double x, double y) {
         Ammo ammo = this.weapon.shoot();
         ammo.setFriend(Player.class);
-        discard.add(ammo);
+        this.discard.add(ammo);
         ammo.applyEffect(this, "Shoot");
         this.reloadCooldown = (int)(ammo.getFireDelay()*(1+cooldownMod/100));
         this.targetx -= Math.cos(-Math.atan2(x-this.xpos, y-this.ypos)+Math.PI/2)*ammo.getRecoil();
@@ -85,7 +86,7 @@ public class Player implements ICollidable {
 
     public void refreshReserve() {
         this.reserve.addAll(this.discard);
-        Collections.shuffle(reserve);
+        Collections.shuffle(this.reserve);
         this.discard.clear();
     }
 
@@ -94,7 +95,7 @@ public class Player implements ICollidable {
         if (col.getFriend() == Player.class) {
             return true;
         }
-        return iframes > 0;
+        return this.iframes > 0;
     }
 
     public ArrayList<Ammo> getReserve() {

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class ItemLoader {
-    private static int totalItems = 1;
+    private static int totalItems = 4;
 
     public static Ammo[] loadAll() {
         Ammo[] stuff = new Ammo[totalItems];

@@ -8,6 +8,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -76,8 +77,9 @@ public class HelloFX extends Application {
         root.getChildren().add(disc);
         root.getChildren().add(discNum);
         root.getChildren().add(coords);
+        ArrayList<Ammo> currentCarts = new ArrayList<Ammo>();
         HashMap<Ammo, AmmoDisplayed> cartData = new HashMap<Ammo, AmmoDisplayed>();
-        // new Relic(1, 1, "", 1, new ArrayList<>(List.of("Cd_-100", "Rld_-100", "Spd_+50")), "").applyEffect(p);
+        // new Relic(1, "", "", 1, new ArrayList<>(List.of("Cd_-100", "Rld_-100", "Spd_+50")), "Start").applyEffect(p, "Start");
         scene.setOnMousePressed(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 firing = true;
@@ -143,6 +145,7 @@ public class HelloFX extends Application {
                 for (int i = 0; i < p.getCartridge().size(); i++) {
                     if (cartData.get(p.getCartridge().get(i)) == null) {
                         cartData.put(p.getCartridge().get(i), new AmmoDisplayed(BOARD_X-60, 40, p.getCartridge().get(i), p.getReloadTime()));
+                        currentCarts.add(p.getCartridge().get(i));
                         root.getChildren().add(cartData.get(p.getCartridge().get(i)).getShape());
                     }
                     cartData.get(p.getCartridge().get(i)).setTargetX(BOARD_X - 60);
@@ -152,11 +155,11 @@ public class HelloFX extends Application {
 
                 if (firing && p.getReloadCooldown() <= 0) {
                     Ammo temp = p.shoot(mousex, mousey);
-                    movables.add(new AmmoDisplayed(cartData.get(temp).getX(), cartData.get(temp).getY(), BOARD_X-130, 30));
-                    sprites.add(((AmmoDisplayed)movables.get(movables.size()-1)).getShape());
-                    root.getChildren().add(sprites.get(sprites.size()-1));
-                    root.getChildren().remove(cartData.get(temp).getShape());
-                    cartData.remove(temp);
+                    // movables.add(new AmmoDisplayed(cartData.get(temp).getX(), cartData.get(temp).getY(), BOARD_X-130, 30));
+                    // sprites.add(((AmmoDisplayed)movables.get(movables.size()-1)).getShape());
+                    // root.getChildren().add(sprites.get(sprites.size()-1));
+                    // root.getChildren().remove(cartData.get(temp).getShape());
+                    // cartData.remove(temp);
                     Ammo shot = (Ammo)temp.clone();
                     shot.setX(p.getX());
                     shot.setY(p.getY());
@@ -164,10 +167,30 @@ public class HelloFX extends Application {
                     shot.setYVelocity(shot.getProjSpd()*Math.sin(rotAngle));
                     movables.add(shot);
                     collidables.add(shot);
-                    sprites.add(new Circle(shot.getSize()));
+                    Circle img = new Circle(shot.getSize());
+                    img.setFill(new ImagePattern(shot.getShape()));
+                    sprites.add(img);
                     root.getChildren().add(sprites.get(sprites.size()-1));
                 } else if (specialing && p.getReloadCooldown() <= 0) {
                     p.special();
+                }
+
+                for (int i = 0; i < currentCarts.size(); i++) {
+                    if (!p.getCartridge().contains(currentCarts.get(i))) {
+                        if (p.getReserve().contains(currentCarts.get(i))) {
+                            movables.add(new AmmoDisplayed(cartData.get(currentCarts.get(i)).getX(), cartData.get(currentCarts.get(i)).getY(), currentCarts.get(i).getIcon(), BOARD_X-130, 30));
+                        } else if (p.getDiscard().contains(currentCarts.get(i))) {
+                            movables.add(new AmmoDisplayed(cartData.get(currentCarts.get(i)).getX(), cartData.get(currentCarts.get(i)).getY(), currentCarts.get(i).getIcon(), BOARD_X-130, 30));
+                        } else {
+                            movables.add(new AmmoDisplayed(cartData.get(currentCarts.get(i)).getX(), cartData.get(currentCarts.get(i)).getY(), currentCarts.get(i).getIcon(), BOARD_X+250, 250));
+                        }
+                        sprites.add(((AmmoDisplayed)movables.get(movables.size()-1)).getShape());
+                        root.getChildren().add(sprites.get(sprites.size()-1));
+                        root.getChildren().remove(cartData.get(currentCarts.get(i)).getShape());
+                        cartData.remove(currentCarts.get(i));
+                        currentCarts.remove(i);
+                        i--;
+                    }
                 }
 
                 rotAngle = -Math.atan2(mousex-p.getX(), mousey-p.getY())+Math.PI/2;

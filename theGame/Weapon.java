@@ -1,11 +1,11 @@
 package theGame;
 import java.util.*;
 
-abstract class Weapon {
-    private String name;
-    private int capacity;
-    private int reloadSpd;
-    private ArrayList<Ammo> cartridge = new ArrayList<Ammo>();
+public abstract class Weapon {
+    protected String name;
+    protected int capacity;
+    protected int reloadSpd;
+    protected ArrayList<Ammo> cartridge = new ArrayList<Ammo>();
 
     abstract Ammo shoot();
     abstract void special();

@@ -3,21 +3,21 @@ import javafx.scene.shape.*;
 import java.util.*;
 
 abstract class Enemy implements ICollidable {
-    private Shape sprite;
-    private String name;
-    private int value;
-    private int hp;
-    private int dmg;
-    private double xpos;
-    private double ypos;
-    private double targetX;
-    private double targetY;
-    private double spd;
-    private double size;
-    private ArrayList<ICollidable> immunityList = new ArrayList<ICollidable>();
-    private HashMap<ICollidable, Integer> immunityTimers = new HashMap<ICollidable, Integer>();
-    private double realspd;
-    private int damageTimer = 0;
+    protected Shape sprite;
+    protected String name;
+    protected int value;
+    protected int hp;
+    protected int dmg;
+    protected double xpos;
+    protected double ypos;
+    protected double targetX;
+    protected double targetY;
+    protected double spd;
+    protected double size;
+    protected ArrayList<ICollidable> immunityList = new ArrayList<ICollidable>();
+    protected HashMap<ICollidable, Integer> immunityTimers = new HashMap<ICollidable, Integer>();
+    protected double realspd;
+    protected int damageTimer = 0;
 
     @Override
     public void collide(ICollidable col) {
@@ -26,7 +26,7 @@ abstract class Enemy implements ICollidable {
             this.damageTimer = 10;
             this.takeDamage(col.getDmg());
             this.immunityList.add(col);
-            this.immunityTimers.put(col, 30);
+            this.immunityTimers.put(col, 15);
         }
     }
 

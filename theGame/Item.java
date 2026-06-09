@@ -1,11 +1,11 @@
 package theGame;
 import java.util.*;
 abstract class Item implements IEffectable {
-    private int rarity;
-    private String type;
-    private String name;
-    private int id;
-    private ArrayList<String> effects;
+    protected int rarity;
+    protected String type;
+    protected String name;
+    protected int id;
+    protected ArrayList<String> effects;
 
     public int getRarity() {
         return this.rarity;

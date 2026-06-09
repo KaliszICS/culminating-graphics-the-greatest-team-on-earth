@@ -14,47 +14,47 @@ public class RegularAmmo extends Ammo {
     HashMap<ICollidable, Integer> immunityTimers = new HashMap<ICollidable, Integer>();
 
     public RegularAmmo(int damage, double projSpd, double recoil, String effects, double size, double duration, int fireDelay, int pierce) {
-        super.setDamage(damage);
-        super.setProjSpd(projSpd);
-        super.setRecoil(recoil);
-        super.setUpgradeable("");
-        super.setXVelocity(0);
-        super.setYVelocity(0);
-        super.setX(0);
-        super.setY(0);
-        super.setSize(size);
-        super.setDuration(duration);
-        super.setFireDelay(fireDelay);
+        this.damage = damage;
+        this.projSpd = projSpd;
+        this.recoil = recoil;
+        this.upgradeable = "";
+        this.xvelocity = 0;
+        this.yvelocity = 0;
+        this.xpos = 0;
+        this.ypos = 0;
+        this.size = size;
+        this.duration = duration;
+        this.fireDelay = fireDelay;
         this.pierce = pierce;
         this.timer = (int)super.getDuration();
         ArrayList<String> tempeff = new ArrayList<String>();
         tempeff.addAll(List.of(effects.split(" ")));
-        super.setEffects(tempeff);
+        super.effects = tempeff;
     }
 
     public RegularAmmo(int id, String name, String type, int rarity, String effects, String spriteLink, String iconLink, int damage, double projSpd, double recoil, double size, double duration, int fireDelay, int pierce) {
-        super.setId(id);
-        super.setName(name);
-        super.setType(type);
-        super.setRarity(rarity);
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.rarity = rarity;
         this.bigSprite = new Image(spriteLink);
         this.smallSprite = new Image(iconLink);
-        super.setDamage(damage);
-        super.setProjSpd(projSpd);
-        super.setRecoil(recoil);
-        super.setUpgradeable("");
-        super.setXVelocity(0);
-        super.setYVelocity(0);
-        super.setX(0);
-        super.setY(0);
-        super.setSize(size);
-        super.setDuration(duration);
-        super.setFireDelay(fireDelay);
+        this.damage = damage;
+        this.projSpd = projSpd;
+        this.recoil = recoil;
+        this.upgradeable = "";
+        this.xvelocity = 0;
+        this.yvelocity = 0;
+        this.xpos = 0;
+        this.ypos = 0;
+        this.size = size;
+        this.duration = duration;
+        this.fireDelay = fireDelay;
         this.pierce = pierce;
         this.timer = (int)super.getDuration();
         ArrayList<String> tempeff = new ArrayList<String>();
         tempeff.addAll(List.of(effects.split(" ")));
-        super.setEffects(tempeff);
+        super.effects = tempeff;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class RegularAmmo extends Ammo {
 
     @Override
     public boolean isImmune(ICollidable col) {
-        if (col.getClass() == (super.getFriend())) {
+        if (col.getClass() == (this.friendly)) {
             return true;
         }
         if (this.immunityList.contains(col)) {
@@ -96,8 +96,8 @@ public class RegularAmmo extends Ammo {
                 this.immunityList.remove(i);
             }
         }
-        super.setX(super.getX()+super.getXVelocity());
-        super.setY(super.getY()+super.getYVelocity());
+        this.xpos += this.xvelocity;
+        this.ypos += this.yvelocity;
     }
 
     @Override
@@ -105,7 +105,7 @@ public class RegularAmmo extends Ammo {
         if (!this.immunityList.contains(col) && this.pierce >= 0) {
             this.pierce--;
             this.immunityList.add(col);
-            this.immunityTimers.put(col, 30);
+            this.immunityTimers.put(col, 15);
         }
     }
 
@@ -116,8 +116,8 @@ public class RegularAmmo extends Ammo {
 
     @Override
     public void applyEffect(Player player, String condition) {
-        for (int i = 0; i < super.getEffects().size(); i++) {
-            String[] total = super.getEffects().get(i).split("_");
+        for (int i = 0; i < this.effects.size(); i++) {
+            String[] total = this.effects.get(i).split("_");
             String cond = total[0];
             if (condition.equals(cond)) {
                 String eff = total[1];
@@ -147,13 +147,18 @@ public class RegularAmmo extends Ammo {
                             double val = Double.parseDouble(total[5+2*z]);
                             if (stat.equals("Dura")) {
                                 this.timer += val;
-                                // super.setDuration(super.getDuration()+val);
                             } else if (stat.equals("Size")) {
-                                super.setSize(super.getSize()+val);
+                                this.size += val;
                             } else if (stat.equals("Dmg")) {
-                                super.setDamage((int)(super.getDmg()+val));
+                                this.damage += val;
                             }
                         }
+                    }
+                } else if (eff.equals("Create")) {
+                    double times = Double.parseDouble(total[2]);
+                    int id = Integer.parseInt(total[3]);
+                    for (int j = 0; j < times; j++) {
+                        player.getCartridge().add((Ammo)(player.ALL_AMMO[id].clone()));
                     }
                 }
             }
@@ -165,6 +170,6 @@ public class RegularAmmo extends Ammo {
     }
 
     public void resetTimer() {
-        this.timer = (int)super.getDuration();
+        this.timer = (int)this.duration;
     }
 }

@@ -1,9 +1,10 @@
 package theGame;
 
 import javafx.scene.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.image.*;
 
 public class AmmoDisplayed implements IMovable {
     private double xpos = 0;
@@ -26,14 +27,18 @@ public class AmmoDisplayed implements IMovable {
         this.sprite = temp;
     }
 
-    public AmmoDisplayed(double xpos, double ypos, double targetx, double targety) {
+    public AmmoDisplayed(double xpos, double ypos, Image icon, double targetx, double targety) {
         this.xpos = xpos;
         this.ypos = ypos;
         this.targetx = targetx;
         this.targety = targety;
         this.reloadTime = 60;
         this.expiring = true;
-        this.sprite = new Rectangle(40, 10);
+        ImageView temp = new ImageView(icon);
+        temp.setSmooth(true);
+        temp.setFitHeight(10);
+        temp.setFitWidth(40);
+        this.sprite = temp;
     }
 
     public Node getShape() {

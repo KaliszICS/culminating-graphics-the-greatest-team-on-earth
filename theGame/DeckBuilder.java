@@ -26,16 +26,20 @@ public class DeckBuilder {
 
     public static ArrayList<Ammo> idkIWasBored() {
         ArrayList<Ammo> deck = new ArrayList<Ammo>();
-        for (int i = 0; i < 1; i++) {
-            deck.add(new RegularAmmo(1, 15, 0, null, 30, 30, 20, 0));
-        }
+        Ammo[] stuff = ItemLoader.loadAll();
+        deck.add(stuff[1]);
         return deck;
     }
 
-    public static ArrayList<Ammo> testDeck() {
-        Ammo[] stuff = ItemLoader.loadAll();
+    public static ArrayList<Ammo> testDeck(Ammo[] ammopool) {
         ArrayList<Ammo> deck = new ArrayList<Ammo>();
-        deck.add(stuff[0]);
+        deck.add((Ammo)ammopool[0].clone());
+        deck.add((Ammo)ammopool[1].clone());
+        deck.add((Ammo)ammopool[2].clone());
+        deck.add((Ammo)ammopool[1].clone());
+        deck.add((Ammo)ammopool[1].clone());
+        deck.add((Ammo)ammopool[1].clone());
+        deck.add((Ammo)ammopool[1].clone());
         return deck;
     }
 }

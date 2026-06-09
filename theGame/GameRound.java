@@ -35,7 +35,7 @@ public class GameRound {
 
     public void spawnEnemies(Pane root, ArrayList<Node> sprites, ArrayList<IMovable> movables, ArrayList<ICollidable> collidables) {
         this.currentTime--;
-        this.timer.setText(""+(int)Math.floor(currentTime/60));
+        this.timer.setText(""+currentTime/60);
         for (int i = 0; i < this.timers.size(); i++) {
             if (this.currentTime == this.timers.get(i) + 60) {
                 double spawnx = Math.random()*1000;
@@ -78,7 +78,11 @@ public class GameRound {
         int currentPoints = this.totalPoints;
         while (currentPoints > 0) {
             // int enemypts = (int)Math.min(currentPoints, Math.ceil(this.totalPoints*(0.5/(128*Math.random()+2))));
-            int enemypts = (int)Math.ceil(this.totalPoints*(((double)60/this.time)-((double)3/this.time))*Math.random()+this.totalPoints*((double)3/this.time));
+            int enemypts = (int)Math.ceil(
+                this.totalPoints*((60.0/this.time) - (3.0/this.time))
+                 * Math.random()
+                 + this.totalPoints * (3.0/this.time)
+                );
             currentPoints -= enemypts;
             this.enemies.add(this.generateEnemy(enemypts));
         }
