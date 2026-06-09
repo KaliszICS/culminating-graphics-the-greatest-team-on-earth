@@ -1,6 +1,7 @@
 package theGame;
 
 import javafx.scene.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -11,14 +12,18 @@ public class AmmoDisplayed implements IMovable {
     private double targety = 0;
     private int timer = 60;
     private double reloadTime;
-    private Rectangle sprite;
+    private Node sprite;
     private boolean expiring = false;
     
     public AmmoDisplayed(double xpos, double ypos, Ammo ammo, double reloadTime) {
         this.xpos = xpos;
         this.ypos = ypos;
         this.reloadTime = reloadTime;
-        this.sprite = new Rectangle(40, 10);
+        ImageView temp = new ImageView(ammo.getIcon());
+        temp.setSmooth(true);
+        temp.setFitHeight(10);
+        temp.setFitWidth(40);
+        this.sprite = temp;
     }
 
     public AmmoDisplayed(double xpos, double ypos, double targetx, double targety) {
@@ -29,7 +34,6 @@ public class AmmoDisplayed implements IMovable {
         this.reloadTime = 60;
         this.expiring = true;
         this.sprite = new Rectangle(40, 10);
-        this.sprite.setFill(Color.CADETBLUE);
     }
 
     public Node getShape() {
@@ -49,12 +53,12 @@ public class AmmoDisplayed implements IMovable {
         this.ypos += dy*(1-Math.pow(10, -2/reloadTime));
         this.sprite.setTranslateX(xpos);
         this.sprite.setTranslateY(ypos);
-        if (expiring) {
-            timer--;
+        if (this.expiring) {
+            this.timer--;
             this.sprite.setRotate(timer*10);
-            if (timer <= 30) {
-                this.sprite.setScaleX(timer/30.0);
-                this.sprite.setScaleY(timer/30.0);
+            if (this.timer <= 30) {
+                this.sprite.setScaleX(this.timer/30.0);
+                this.sprite.setScaleY(this.timer/30.0);
             }
         }
     }

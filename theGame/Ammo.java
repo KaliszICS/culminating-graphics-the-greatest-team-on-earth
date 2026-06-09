@@ -1,5 +1,7 @@
 package theGame;
 
+import javafx.scene.image.*;
+
 abstract class Ammo extends Item implements ICollidable, Cloneable {
     private int damage;
     private double projSpd;
@@ -15,6 +17,10 @@ abstract class Ammo extends Item implements ICollidable, Cloneable {
     private Class<? extends ICollidable> friendly;
 
     abstract void upgrade();
+
+    abstract Image getShape();
+
+    abstract Image getIcon();
 
     @Override
     public Object clone(){  

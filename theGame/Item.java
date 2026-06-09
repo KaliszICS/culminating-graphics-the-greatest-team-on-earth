@@ -2,7 +2,7 @@ package theGame;
 import java.util.*;
 abstract class Item implements IEffectable {
     private int rarity;
-    private int type;
+    private String type;
     private String name;
     private int id;
     private ArrayList<String> effects;
@@ -11,7 +11,7 @@ abstract class Item implements IEffectable {
         return this.rarity;
     }
 
-    public int getType() {
+    public String getType() {
         return this.type;
     }
     
@@ -31,7 +31,7 @@ abstract class Item implements IEffectable {
         this.rarity = rarity;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
     

@@ -4,7 +4,7 @@ class DefaultWeapon extends Weapon {
     public DefaultWeapon(ArrayList<Ammo> reserve) {
         super.setName("Original");
         super.setCapacity(6);
-        super.setReloadSpd(60);
+        super.setReloadSpd(120);
         this.reload(reserve);
     }
     

@@ -33,13 +33,15 @@ public class HelloFX extends Application {
     @Override
     public void start(Stage stage) {
         Pane root = new Pane();
+        Scene scene = new Scene(root, BOARD_X, BOARD_Y);
+        Pane root2 = new Pane();
+        Scene scene2 = new Scene(root2, BOARD_X, BOARD_Y);
         Player p = new Player();
         Circle circle = new Circle();
         circle.setRadius(p.getSize());
         circle.setCenterX(p.getX());
         circle.setCenterY(p.getY());
         Rectangle rectangle = new Rectangle();
-        Scene scene = new Scene(root, BOARD_X, BOARD_Y);
         root.getChildren().add(circle);
         root.getChildren().add(rectangle);
         rectangle.setWidth(p.getSize()+15);
@@ -58,7 +60,6 @@ public class HelloFX extends Application {
         bagNum.setTextFill(Color.WHITE);
         bagNum.setScaleX(3);
         bagNum.setScaleY(3);
-//        ImageView lol = new ImageView("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_2LPYRlundRD0JEWh_Hp5o5T4miDl42J2XQ&s");
         Rectangle disc = new Rectangle(50, 50);
         disc.setX(BOARD_X - 135);
         disc.setY(15);
@@ -75,7 +76,6 @@ public class HelloFX extends Application {
         root.getChildren().add(disc);
         root.getChildren().add(discNum);
         root.getChildren().add(coords);
-        // root.getChildren().add(lol);
         HashMap<Ammo, AmmoDisplayed> cartData = new HashMap<Ammo, AmmoDisplayed>();
         // new Relic(1, 1, "", 1, new ArrayList<>(List.of("Cd_-100", "Rld_-100", "Spd_+50")), "").applyEffect(p);
         scene.setOnMousePressed(e -> {
@@ -132,7 +132,7 @@ public class HelloFX extends Application {
                 movingLeft = false;
             }
         });
-        new AnimationTimer() {
+        AnimationTimer gameplayStage = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 bagNum.setText(""+p.getReserve().size());
@@ -262,8 +262,13 @@ public class HelloFX extends Application {
                 p.setTargetX(p.getTargetX() + horiz);
                 p.setTargetY(p.getTargetY() + vert);
             }
-        }.start();
-
+        };
+        Button changestage = new Button("go to shop idk");
+        changestage.setFocusTraversable(false);
+        root.getChildren().add(changestage);
+        changestage.setOnAction(e -> {
+            gameplayStage.start();
+        });
         stage.setScene(scene);
         stage.show();
     }

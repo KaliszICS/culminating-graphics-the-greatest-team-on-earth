@@ -26,7 +26,7 @@ public class MeleeEnemy extends Enemy {
         } else if (super.getDamageTimer() >= 0) {
             super.getShape().setFill(Color.RED);
         } else {
-            super.getShape().setFill(Color.BLACK);
+            super.getShape().setFill(Color.BLUEVIOLET);
         }
         super.decreaseDamageTimer();
         for (int i = 0; i < super.getImmunityList().size(); i++) {

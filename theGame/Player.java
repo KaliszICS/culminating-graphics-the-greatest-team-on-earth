@@ -10,6 +10,7 @@ public class Player implements ICollidable {
     private int reloadCooldown = 0;
     private int hp;
     private int money;
+    private int shield;
     private double size;
     private double speed;
     private Weapon weapon;
@@ -29,7 +30,7 @@ public class Player implements ICollidable {
         this.size = 25;
         this.speed = 7.5;
         this.discard = new ArrayList<Ammo>();
-        this.reserve = new ArrayList<Ammo>(DeckBuilder.starterDeck());
+        this.reserve = new ArrayList<Ammo>(DeckBuilder.testDeck());
         this.weapon = new DefaultWeapon(reserve);
     }
 
@@ -54,15 +55,14 @@ public class Player implements ICollidable {
         Ammo ammo = this.weapon.shoot();
         ammo.setFriend(Player.class);
         discard.add(ammo);
+        ammo.applyEffect(this, "Shoot");
         this.reloadCooldown = (int)(ammo.getFireDelay()*(1+cooldownMod/100));
         this.targetx -= Math.cos(-Math.atan2(x-this.xpos, y-this.ypos)+Math.PI/2)*ammo.getRecoil();
         this.targety -= Math.sin(-Math.atan2(x-this.xpos, y-this.ypos)+Math.PI/2)*ammo.getRecoil();
         if (this.weapon.getCartridge().size() == 0) {
             this.reloadCooldown = (int)(this.weapon.getReloadSpd()*(1+reloadMod/100));
             if (!this.weapon.reload(reserve)) {
-                this.reserve.addAll(this.discard);
-                Collections.shuffle(reserve);
-                this.discard.clear();
+                this.refreshReserve();
                 this.weapon.reload(reserve);
             }
         }
@@ -83,6 +83,12 @@ public class Player implements ICollidable {
         hp -= dmg;
     }
 
+    public void refreshReserve() {
+        this.reserve.addAll(this.discard);
+        Collections.shuffle(reserve);
+        this.discard.clear();
+    }
+
     @Override
     public boolean isImmune(ICollidable col) {
         if (col.getFriend() == Player.class) {
@@ -95,6 +101,10 @@ public class Player implements ICollidable {
         return this.reserve;
     }
 
+    public ArrayList<Ammo> getDiscard() {
+        return this.discard;
+    }
+
     public ArrayList<Ammo> getCartridge() {
         return this.weapon.getCartridge();
     }
@@ -104,7 +114,11 @@ public class Player implements ICollidable {
     }
 
     public int getDmg() {
-        return thorns;
+        return this.thorns;
+    }
+
+    public Weapon getWeapon() {
+        return this.weapon;
     }
 
     @Override
@@ -144,7 +158,7 @@ public class Player implements ICollidable {
     }
 
     public double getSpeed() {
-        return this.speed;
+        return this.speed*(1+this.speedMod/100);
     }
 
     public void setSize(double size) {
@@ -177,5 +191,13 @@ public class Player implements ICollidable {
 
     public void adjustCdMod(double cdMod) {
         this.cooldownMod += cdMod;
+    }
+
+    public void setIFrames(int iframes) {
+        this.iframes = iframes;
+    }
+
+    public void setShield(int shield) {
+        this.shield = shield;
     }
 }

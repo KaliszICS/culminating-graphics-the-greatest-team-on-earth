@@ -5,7 +5,7 @@ import java.util.*;
 public class Relic extends Item {
     private String condition;
 
-    public Relic(int rarity, int type, String name, int id, ArrayList<String> effects, String condition) {
+    public Relic(int rarity, String type, String name, int id, ArrayList<String> effects, String condition) {
         super.setRarity(rarity);
         super.setType(type);
         super.setName(name);
@@ -15,7 +15,10 @@ public class Relic extends Item {
     }
 
     @Override
-    public void applyEffect(Player player) {
+    public void applyEffect(Player player, String condition) {
+        if (!this.condition.equals(condition)) {
+            return;
+        }
         for (int i = 0; i < super.getEffects().size(); i++) {
             String[] eff = getEffects().get(i).split("_");
             if (eff[0].equals("Spd")) {

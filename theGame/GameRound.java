@@ -18,11 +18,11 @@ public class GameRound {
     private double[][] spawnLocations;
 
     public GameRound() {
-        this.wave = 10;
-        this.difficulty = 5;
+        this.wave = 1;
+        this.difficulty = 1;
         this.time = 21*60+30*this.wave;
         this.currentTime = this.time;
-        this.totalPoints = 10+25*this.wave*this.difficulty;
+        this.totalPoints = 10+(int)(10*Math.pow(1+((double)this.wave/5), 2)*this.difficulty);
         this.timer = new Label();
         this.timer.setTranslateY(30);
         this.timer.setTranslateX(500);
@@ -40,7 +40,7 @@ public class GameRound {
             if (this.currentTime == this.timers.get(i) + 60) {
                 double spawnx = Math.random()*1000;
                 double spawny = Math.random()*600;
-                SpawnIndicator temp = new SpawnIndicator(spawnx, spawny);
+                SpawnIndicator temp = new SpawnIndicator(spawnx, spawny, enemies.get(i).getSize());
                 movables.add(temp);
                 sprites.add(temp.getShape());
                 root.getChildren().add(temp.getShape());
@@ -78,7 +78,7 @@ public class GameRound {
         int currentPoints = this.totalPoints;
         while (currentPoints > 0) {
             // int enemypts = (int)Math.min(currentPoints, Math.ceil(this.totalPoints*(0.5/(128*Math.random()+2))));
-            int enemypts = (int)(this.totalPoints*(((double)60/this.time)-((double)3/this.time))*Math.random()+this.totalPoints*((double)3/this.time));
+            int enemypts = (int)Math.ceil(this.totalPoints*(((double)60/this.time)-((double)3/this.time))*Math.random()+this.totalPoints*((double)3/this.time));
             currentPoints -= enemypts;
             this.enemies.add(this.generateEnemy(enemypts));
         }
@@ -94,6 +94,7 @@ public class GameRound {
         double spd = 1+0.2*pointDistribution[2];
         double size = 30*Math.pow(1.05, pointDistribution[3]);
         Enemy en = new MeleeEnemy(dmg, hp, spd, size);
+        en.setValue(points);
         return en;
     }
 
