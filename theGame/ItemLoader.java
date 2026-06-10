@@ -8,7 +8,7 @@ import java.util.Scanner;
  * @author Eric Wang
  */
 public class ItemLoader {
-    private static int totalItems = 4;
+    private static int totalItems = 21;
 
     /**Loads every item in the text file according to the number of total items
      * 

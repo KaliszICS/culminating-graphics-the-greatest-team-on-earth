@@ -47,13 +47,14 @@ public class DeckBuilder {
      */
     public static ArrayList<Ammo> testDeck(Ammo[] ammopool) {
         ArrayList<Ammo> deck = new ArrayList<Ammo>();
-        deck.add((Ammo)ammopool[0].clone());
-        deck.add((Ammo)ammopool[1].clone());
-        deck.add((Ammo)ammopool[2].clone());
-        deck.add((Ammo)ammopool[1].clone());
-        deck.add((Ammo)ammopool[1].clone());
-        deck.add((Ammo)ammopool[1].clone());
-        deck.add((Ammo)ammopool[1].clone());
+        deck.add(ammopool[0].clone());
+        deck.add(ammopool[1].clone());
+        deck.add(ammopool[2].clone());
+        deck.add(ammopool[1].clone());
+        deck.add(ammopool[1].clone());
+        deck.add(ammopool[1].clone());
+        deck.add(ammopool[1].clone());
+        deck.add(ammopool[4].clone());
         return deck;
     }
 }

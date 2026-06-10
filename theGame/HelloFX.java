@@ -305,9 +305,10 @@ public class HelloFX extends Application {
                         movables.get(i).move();
                         if (movables.get(i) instanceof RegularAmmo) {
                             ((RegularAmmo)movables.get(i)).timerDown();
-                        } else if (movables.get(i) instanceof MeleeEnemy) {
-                            ((MeleeEnemy)movables.get(i)).setTargetX(p.getX());
-                            ((MeleeEnemy)movables.get(i)).setTargetY(p.getY());
+                        } else if (movables.get(i) instanceof Enemy) {
+                            ((Enemy)movables.get(i)).setTargetX(p.getX());
+                            ((Enemy)movables.get(i)).setTargetY(p.getY());
+                            p.changeMoney(((Enemy)movables.get(i)).getValue());
                         }
                         sprites.get(i).setTranslateX(movables.get(i).getX());
                         sprites.get(i).setTranslateY(movables.get(i).getY());

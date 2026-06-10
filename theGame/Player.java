@@ -92,7 +92,7 @@ public class Player implements ICollidable {
         this.maxHp = 100;
         this.currentHp = this.maxHp;
 
-        this.money = 100;
+        this.money = 0;
 
         this.size = 25;
         this.speed = 7.5;
@@ -393,6 +393,14 @@ public class Player implements ICollidable {
         return this.speed * (1 + this.speedMod / 100);
     }
 
+    /**Gets the amount of money the player has
+     * 
+     * @return the money amount
+     */
+    public int getMoney() {
+        return this.money;
+    }
+
     /**
      * Sets the player's collision size.
      *
@@ -463,6 +471,22 @@ public class Player implements ICollidable {
      */
     public void adjustCdMod(double cdMod) {
         this.cooldownMod += cdMod;
+    }
+
+    /**Sets the money value
+     * 
+     * @param money the new money value
+     */
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    /**Adjusts the money amount by a specific value
+     * 
+     * @param money the value to adjust the money by
+     */
+    public void changeMoney(int moneyDiff) {
+        this.money += moneyDiff;
     }
 
     /**
