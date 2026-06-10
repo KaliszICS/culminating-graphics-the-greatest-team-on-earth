@@ -236,6 +236,11 @@ public class Player implements ICollidable {
         this.discard.clear();
     }
 
+    /**
+     * Gets the list of all ammo
+     * 
+     * @return the list of all ammo
+     */
     public Ammo[] getAllAmmo() {
         return ALL_AMMO;
     }

@@ -2,6 +2,8 @@ package theGame;
 
 import java.util.*;
 
+import javafx.scene.image.Image;
+
 /**
  * Represents a Relic item that applies conditional effects to a Player.
  * A Relic activates when a specific trigger condition matches its internal condition. When active, it applies a list of effects to the given Player.
@@ -64,6 +66,11 @@ public class Relic extends Item {
      */
     public boolean checkActive(String trigger) {
         return condition.equals(trigger);
+    }
+
+    @Override
+    public Image getIcon() {
+        return new Image("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_2LPYRlundRD0JEWh_Hp5o5T4miDl42J2XQ&s");
     }
 
     /**

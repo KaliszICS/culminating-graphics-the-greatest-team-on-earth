@@ -40,6 +40,7 @@ public class HelloFX extends Application {
     int diff = 1;
     int titleTimer = 0;
     Player p;
+    Shop shop;
     
     /**The game, basically */
     @Override
@@ -54,6 +55,7 @@ public class HelloFX extends Application {
         Pane deathPane = new Pane();
         Scene deathScene = new Scene(deathPane, BOARD_X, BOARD_Y);
         p = new Player();
+        shop = new Shop(p);
         
         /*
         * THE TITLE SCREEN
@@ -89,6 +91,48 @@ public class HelloFX extends Application {
          */
         Button nextWave = new Button("Next Wave");
         shopPane.getChildren().add(nextWave);
+        Label shopCash = new Label();
+        shopCash.setTranslateY(30);
+        shopCash.setTranslateX(500);
+        shopCash.setScaleX(5);
+        shopCash.setScaleY(5);
+        shopPane.getChildren().add(shopCash);
+        Button buyFirstItem = new Button();
+        buyFirstItem.setFocusTraversable(false);
+        Label firstItemInfo = new Label();
+        ImageView sprite = new ImageView();
+        shopPane.getChildren().add(buyFirstItem);
+        shopPane.getChildren().add(firstItemInfo);
+        shopPane.getChildren().add(sprite);
+        Button buySecondItem = new Button();
+        Button buyThirdItem = new Button();
+        Button buyFourthItem = new Button();
+        int moneyFlashTimer = 0;
+        AnimationTimer shopAnim = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                shopCash.setText("$" + p.getMoney());
+                if (moneyFlashTimer > 45) {
+                    shopCash.setTextFill(Color.RED);
+                } else if (moneyFlashTimer <= 45 && moneyFlashTimer >= 30) {
+                    shopCash.setTextFill(Color.GREEN);
+                } else if (moneyFlashTimer < 30 && moneyFlashTimer > 15) {
+                    shopCash.setTextFill(Color.RED);
+                } else {
+                    shopCash.setTextFill(Color.GREEN);
+                }
+            }
+        };
+        buyFirstItem.setOnAction(e -> {
+            int itemCost = (int)(10.0*Math.pow(shop.getStock()[0].getRarity(), 1.5));
+            if (p.getMoney() >= itemCost) {
+                p.changeMoney(-itemCost);
+                if (shop.getStock()[0] instanceof Ammo) {
+                    
+                }
+            }
+        });
+
 
         /* 
          * Death Screen
@@ -234,6 +278,7 @@ public class HelloFX extends Application {
             new AnimationTimer() {
                 @Override
                 public void handle(long now) {
+                    shopAnim.stop();
                     hpBar.setScaleX(5.0*(((double)p.getCurrentHp())/p.getMaxHp()));
                     hpNum.setText(p.getCurrentHp() + "/" + p.getMaxHp());
                     moneyNum.setText("$" + p.getMoney());
@@ -389,7 +434,9 @@ public class HelloFX extends Application {
                     p.setTargetY(p.getTargetY() + vert);
                     if (round.getCurrentTime() <= 0) {
                         wave += 10;
+                        shop = new Shop(p);
                         stage.setScene(shopScene);
+                        shopAnim.start();
                         this.stop();
                     } else if (p.getCurrentHp() <= 0) {
                         wave = 1;
