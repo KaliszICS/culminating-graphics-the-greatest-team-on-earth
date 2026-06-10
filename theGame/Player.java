@@ -89,7 +89,7 @@ public class Player implements ICollidable {
         this.maxHp = 100;
         this.currentHp = this.maxHp;
 
-        this.money = 0;
+        this.money = 100;
 
         this.size = 25;
         this.speed = 7.5;
@@ -243,6 +243,22 @@ public class Player implements ICollidable {
      */
     public Ammo[] getAllAmmo() {
         return ALL_AMMO;
+    }
+
+    /**Gets the ammo inventory
+     * 
+     * @return the ammo inventory
+     */
+    public ArrayList<Ammo> getAmmoInventory() {
+        return ammoInv;
+    }
+
+    /**Gets the relic inventory
+     * 
+     * @return the relic inventory
+     */
+    public ArrayList<Relic> getRelicInventory() {
+        return relicInv;
     }
 
     /**

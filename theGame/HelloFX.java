@@ -41,6 +41,7 @@ public class HelloFX extends Application {
     int titleTimer = 0;
     Player p;
     Shop shop;
+    int moneyFlashTimer = 0;
     
     /**The game, basically */
     @Override
@@ -98,19 +99,27 @@ public class HelloFX extends Application {
         shopCash.setScaleY(5);
         shopPane.getChildren().add(shopCash);
         Button buyFirstItem = new Button();
+        buyFirstItem.setScaleX(3);
+        buyFirstItem.setScaleY(3);
+        buyFirstItem.setTranslateX(100);
+        buyFirstItem.setTranslateY(400);
         buyFirstItem.setFocusTraversable(false);
         Label firstItemInfo = new Label();
-        ImageView sprite = new ImageView();
+        firstItemInfo.setTranslateX(100);
+        firstItemInfo.setTranslateY(50);
+        ImageView firstItemSprite = new ImageView();
+        firstItemSprite.setTranslateX(100);
+        firstItemSprite.setTranslateY(500);
         shopPane.getChildren().add(buyFirstItem);
         shopPane.getChildren().add(firstItemInfo);
-        shopPane.getChildren().add(sprite);
+        shopPane.getChildren().add(firstItemSprite);
         Button buySecondItem = new Button();
         Button buyThirdItem = new Button();
         Button buyFourthItem = new Button();
-        int moneyFlashTimer = 0;
         AnimationTimer shopAnim = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                moneyFlashTimer--;
                 shopCash.setText("$" + p.getMoney());
                 if (moneyFlashTimer > 45) {
                     shopCash.setTextFill(Color.RED);
@@ -121,14 +130,34 @@ public class HelloFX extends Application {
                 } else {
                     shopCash.setTextFill(Color.GREEN);
                 }
+                if (shop.getStock()[0] == null) {
+                    firstItemInfo.setText("");
+                    firstItemSprite.setImage(null);
+                    buyFirstItem.setText("Out of Stock");
+                } else {
+                    String firstItemText = "";
+                    firstItemSprite.setImage(shop.getStock()[0].getIcon());
+                    firstItemSprite.setFitHeight(100);
+                    firstItemSprite.setFitWidth(100);
+                    firstItemText += "Name: " +  shop.getStock()[0].getName() + "\n";
+                    firstItemText += "Rarity: " + shop.getStock()[0].getRarity() + "\n";
+                    firstItemInfo.setText(firstItemText);
+                    int itemCost = (int)(10.0*Math.pow(shop.getStock()[0].getRarity(), 2));
+                    buyFirstItem.setText("$" + itemCost);
+                }
             }
         };
         buyFirstItem.setOnAction(e -> {
-            int itemCost = (int)(10.0*Math.pow(shop.getStock()[0].getRarity(), 1.5));
-            if (p.getMoney() >= itemCost) {
-                p.changeMoney(-itemCost);
-                if (shop.getStock()[0] instanceof Ammo) {
-                    
+            if (shop.getStock()[0] != null) {
+                int itemCost = (int)(10.0*Math.pow(shop.getStock()[0].getRarity(), 2));
+                if (p.getMoney() >= itemCost) {
+                    p.changeMoney(-itemCost);
+                    if (shop.getStock()[0] instanceof Ammo) {
+                        p.getAmmoInventory().add((Ammo)shop.getStock()[0]);
+                        shop.getStock()[0] = null;
+                    }
+                } else {
+                    moneyFlashTimer = 60;
                 }
             }
         });
@@ -365,7 +394,7 @@ public class HelloFX extends Application {
                         sprites.get(i).setTranslateY(movables.get(i).getY());
                         if (movables.get(i).isDeleted()) {
                             if (movables.get(i) instanceof Enemy) {
-                                p.changeMoney(((Enemy)movables.get(i)).getValue());
+                                p.changeMoney(((Enemy)movables.get(i)).getValue()*10);
                             }
                             collidables.remove(movables.get(i));
                             root.getChildren().remove(sprites.get(i));
