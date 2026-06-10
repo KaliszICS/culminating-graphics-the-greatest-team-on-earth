@@ -1,6 +1,7 @@
 package theGame;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.animation.*;
@@ -81,6 +82,7 @@ public class HelloFX extends Application {
                 }
             }
         };
+        titleAnim.start();
 
         /* 
          * The Shop
@@ -88,7 +90,24 @@ public class HelloFX extends Application {
         Button nextWave = new Button("Next Wave");
         shopPane.getChildren().add(nextWave);
 
-        titleAnim.start();
+        /* 
+         * Death Screen
+         */
+        Label youLose = new Label("YOU LOSE :(");
+        youLose.setScaleX(10);
+        youLose.setScaleY(10);
+        youLose.setTranslateX(BOARD_X/2);
+        youLose.setTranslateY(BOARD_Y/2-200);
+        Button playAgain = new Button("Play Again");
+        playAgain.setTranslateX(BOARD_X/2);
+        playAgain.setTranslateY(BOARD_Y/2);
+        Button exit = new Button("Exit");
+        exit.setTranslateX(BOARD_X/2);
+        exit.setTranslateY(BOARD_Y/2+50);
+        deathPane.getChildren().add(youLose);
+        deathPane.getChildren().add(playAgain);
+        deathPane.getChildren().add(exit);
+
         scene.setOnMousePressed(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 firing = true;
@@ -362,6 +381,11 @@ public class HelloFX extends Application {
                         wave += 10;
                         stage.setScene(shopScene);
                         this.stop();
+                    } else if (p.getCurrentHp() <= 0) {
+                        wave = 1;
+                        p = new Player();
+                        stage.setScene(deathScene);
+                        this.stop();
                     }
                 }
             }.start();
@@ -370,6 +394,10 @@ public class HelloFX extends Application {
 
         newGame.setOnAction(gameAction);
         nextWave.setOnAction(gameAction);
+        playAgain.setOnAction(gameAction);
+        exit.setOnAction(e -> {
+            Platform.exit();
+        });
         stage.setScene(titleScene);
         stage.show();
     }
