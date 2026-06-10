@@ -3,12 +3,9 @@ package theGame;
 import java.util.*;
 
 /**
- * Represents the player character in the game.
- * <p>
- * The Player manages movement, health, combat, ammunition decks,
- * reloading, relic effects, and collision interactions. The player
- * uses a deck-based ammo system consisting of a reserve pile,
- * cartridge, and discard pile.
+ * A class with for the player character
+ * Can move, shoot, take damage, collide, the whole package
+ * @author Eric Wang
  */
 public class Player implements ICollidable {
 
@@ -237,6 +234,10 @@ public class Player implements ICollidable {
         this.reserve.addAll(this.discard);
         Collections.shuffle(this.reserve);
         this.discard.clear();
+    }
+
+    public Ammo[] getAllAmmo() {
+        return ALL_AMMO;
     }
 
     /**
