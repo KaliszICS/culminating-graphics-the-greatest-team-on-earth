@@ -46,7 +46,7 @@ public class GameRound {
     public GameRound(int wave, int diff) {
         this.wave = wave;
         this.difficulty = diff;
-        this.time = 5*60+30*wave;
+        this.time = 20*60+30*wave;
         this.currentTime = this.time;
         this.totalPoints = 10+(int)(10*Math.pow(1+((double)this.wave/5), 2)*diff);
         this.timer = new Label();
