@@ -109,7 +109,7 @@ public class Player implements ICollidable {
     }
 
     public void takeDamage(int dmg) {
-        hp -= dmg;
+        this.currentHp -= dmg;
     }
 
     public void refreshReserve() {

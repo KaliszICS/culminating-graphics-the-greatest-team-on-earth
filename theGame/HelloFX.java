@@ -35,6 +35,8 @@ public class HelloFX extends Application {
     
     @Override
     public void start(Stage stage) {
+        Pane titlePane = new Pane();
+        Scene titleScene = new Scene(titlePane, BOARD_X, BOARD_Y);
         Pane root = new Pane();
         Scene scene = new Scene(root, BOARD_X, BOARD_Y);
         Pane shopPane = new Pane();
