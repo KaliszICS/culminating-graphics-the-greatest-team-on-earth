@@ -98,9 +98,11 @@ public class HelloFX extends Application {
         shopCash.setScaleX(5);
         shopCash.setScaleY(5);
         shopPane.getChildren().add(shopCash);
+        
+        //first item
         Button buyFirstItem = new Button();
-        buyFirstItem.setScaleX(3);
-        buyFirstItem.setScaleY(3);
+        buyFirstItem.setScaleX(2);
+        buyFirstItem.setScaleY(2);
         buyFirstItem.setTranslateX(100);
         buyFirstItem.setTranslateY(400);
         buyFirstItem.setFocusTraversable(false);
@@ -113,9 +115,60 @@ public class HelloFX extends Application {
         shopPane.getChildren().add(buyFirstItem);
         shopPane.getChildren().add(firstItemInfo);
         shopPane.getChildren().add(firstItemSprite);
+        
+        //second item
         Button buySecondItem = new Button();
+        buySecondItem.setScaleX(2);
+        buySecondItem.setScaleY(2);
+        buySecondItem.setTranslateX(200);
+        buySecondItem.setTranslateY(400);
+        buySecondItem.setFocusTraversable(false);
+        Label secondItemInfo = new Label();
+        secondItemInfo.setTranslateX(200);
+        secondItemInfo.setTranslateY(50);
+        ImageView secondItemSprite = new ImageView();
+        secondItemSprite.setTranslateX(200);
+        secondItemSprite.setTranslateY(500);
+        shopPane.getChildren().add(buySecondItem);
+        shopPane.getChildren().add(secondItemInfo);
+        shopPane.getChildren().add(secondItemSprite);
+
+        //third item
         Button buyThirdItem = new Button();
+        buyThirdItem.setScaleX(2);
+        buyThirdItem.setScaleY(2);
+        buyThirdItem.setTranslateX(300);
+        buyThirdItem.setTranslateY(400);
+        buyThirdItem.setFocusTraversable(false);
+        Label thirdItemInfo = new Label();
+        thirdItemInfo.setTranslateX(300);
+        thirdItemInfo.setTranslateY(50);
+        ImageView thirdItemSprite = new ImageView();
+        thirdItemSprite.setTranslateX(300);
+        thirdItemSprite.setTranslateY(500);
+        shopPane.getChildren().add(buyThirdItem);
+        shopPane.getChildren().add(thirdItemInfo);
+        shopPane.getChildren().add(thirdItemSprite);
+        
+        //fourth item
         Button buyFourthItem = new Button();
+        buyFourthItem.setScaleX(2);
+        buyFourthItem.setScaleY(2);
+        buyFourthItem.setTranslateX(400);
+        buyFourthItem.setTranslateY(400);
+        buyFourthItem.setFocusTraversable(false);
+        Label fourthItemInfo = new Label();
+        fourthItemInfo.setTranslateX(400);
+        fourthItemInfo.setTranslateY(50);
+        ImageView fourthItemSprite = new ImageView();
+        fourthItemSprite.setTranslateX(400);
+        fourthItemSprite.setTranslateY(500);
+        shopPane.getChildren().add(buyFourthItem);
+        shopPane.getChildren().add(fourthItemInfo);
+        shopPane.getChildren().add(fourthItemSprite);
+
+        p.setMoney(10000);
+
         AnimationTimer shopAnim = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -145,6 +198,51 @@ public class HelloFX extends Application {
                     int itemCost = (int)(10.0*Math.pow(shop.getStock()[0].getRarity(), 2));
                     buyFirstItem.setText("$" + itemCost);
                 }
+                if (shop.getStock()[1] == null) {
+                    secondItemInfo.setText("");
+                    secondItemSprite.setImage(null);
+                    buySecondItem.setText("Out of Stock");
+                } else {
+                    String secondItemText = "";
+                    secondItemSprite.setImage(shop.getStock()[1].getIcon());
+                    secondItemSprite.setFitHeight(100);
+                    secondItemSprite.setFitWidth(100);
+                    secondItemText += "Name: " +  shop.getStock()[1].getName() + "\n";
+                    secondItemText += "Rarity: " + shop.getStock()[1].getRarity() + "\n";
+                    secondItemInfo.setText(secondItemText);
+                    int itemCost = (int)(10.0*Math.pow(shop.getStock()[1].getRarity(), 2));
+                    buySecondItem.setText("$" + itemCost);
+                }
+                if (shop.getStock()[2] == null) {
+                    thirdItemInfo.setText("");
+                    thirdItemSprite.setImage(null);
+                    buyThirdItem.setText("Out of Stock");
+                } else {
+                    String thirdItemText = "";
+                    thirdItemSprite.setImage(shop.getStock()[2].getIcon());
+                    thirdItemSprite.setFitHeight(100);
+                    thirdItemSprite.setFitWidth(100);
+                    thirdItemText += "Name: " +  shop.getStock()[2].getName() + "\n";
+                    thirdItemText += "Rarity: " + shop.getStock()[2].getRarity() + "\n";
+                    thirdItemInfo.setText(thirdItemText);
+                    int itemCost = (int)(10.0*Math.pow(shop.getStock()[2].getRarity(), 2));
+                    buyThirdItem.setText("$" + itemCost);
+                }
+                if (shop.getStock()[3] == null) {
+                    thirdItemInfo.setText("");
+                    thirdItemSprite.setImage(null);
+                    buyThirdItem.setText("Out of Stock");
+                } else {
+                    String fourthItemText = "";
+                    fourthItemSprite.setImage(shop.getStock()[3].getIcon());
+                    fourthItemSprite.setFitHeight(100);
+                    fourthItemSprite.setFitWidth(100);
+                    fourthItemText += "Name: " +  shop.getStock()[3].getName() + "\n";
+                    fourthItemText += "Rarity: " + shop.getStock()[3].getRarity() + "\n";
+                    fourthItemInfo.setText(fourthItemText);
+                    int itemCost = (int)(10.0*Math.pow(shop.getStock()[3].getRarity(), 2));
+                    buyFourthItem.setText("$" + itemCost);
+                }
             }
         };
         buyFirstItem.setOnAction(e -> {
@@ -155,6 +253,48 @@ public class HelloFX extends Application {
                     if (shop.getStock()[0] instanceof Ammo) {
                         p.getAmmoInventory().add((Ammo)shop.getStock()[0]);
                         shop.getStock()[0] = null;
+                    }
+                } else {
+                    moneyFlashTimer = 60;
+                }
+            }
+        });
+        buySecondItem.setOnAction(e -> {
+            if (shop.getStock()[1] != null) {
+                int itemCost = (int)(10.0*Math.pow(shop.getStock()[1].getRarity(), 2));
+                if (p.getMoney() >= itemCost) {
+                    p.changeMoney(-itemCost);
+                    if (shop.getStock()[1] instanceof Ammo) {
+                        p.getAmmoInventory().add((Ammo)shop.getStock()[1]);
+                        shop.getStock()[1] = null;
+                    }
+                } else {
+                    moneyFlashTimer = 60;
+                }
+            }
+        });
+        buyThirdItem.setOnAction(e -> {
+            if (shop.getStock()[2] != null) {
+                int itemCost = (int)(10.0*Math.pow(shop.getStock()[2].getRarity(), 2));
+                if (p.getMoney() >= itemCost) {
+                    p.changeMoney(-itemCost);
+                    if (shop.getStock()[2] instanceof Ammo) {
+                        p.getAmmoInventory().add((Ammo)shop.getStock()[2]);
+                        shop.getStock()[2] = null;
+                    }
+                } else {
+                    moneyFlashTimer = 60;
+                }
+            }
+        });
+        buyFourthItem.setOnAction(e -> {
+            if (shop.getStock()[3] != null) {
+                int itemCost = (int)(10.0*Math.pow(shop.getStock()[3].getRarity(), 2));
+                if (p.getMoney() >= itemCost) {
+                    p.changeMoney(-itemCost);
+                    if (shop.getStock()[3] instanceof Ammo) {
+                        p.getAmmoInventory().add((Ammo)shop.getStock()[3]);
+                        shop.getStock()[3] = null;
                     }
                 } else {
                     moneyFlashTimer = 60;

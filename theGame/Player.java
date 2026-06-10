@@ -89,7 +89,7 @@ public class Player implements ICollidable {
         this.maxHp = 100;
         this.currentHp = this.maxHp;
 
-        this.money = 100;
+        this.money = 0;
 
         this.size = 25;
         this.speed = 7.5;
