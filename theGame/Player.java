@@ -188,7 +188,7 @@ public class Player implements ICollidable {
         ammo.applyEffect(this, "Shoot");
 
         this.reloadCooldown = (int) (ammo.getFireDelay() * (1 + cooldownMod / 100));
-        this.targetx -= Math.cos(Math.atan2(x - this.xpos, y - this.ypos) + Math.PI / 2) * ammo.getRecoil();
+        this.targetx -= Math.cos(-Math.atan2(x - this.xpos, y - this.ypos) + Math.PI / 2) * ammo.getRecoil();
         this.targety -= Math.sin(-Math.atan2(x - this.xpos, y - this.ypos) + Math.PI / 2) * ammo.getRecoil();
 
         if (this.weapon.getCartridge().size() == 0) {

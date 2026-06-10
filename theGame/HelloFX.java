@@ -40,6 +40,7 @@ public class HelloFX extends Application {
     /**The game, basically */
     @Override
     public void start(Stage stage) {
+        stage.setResizable(false);
         Pane titlePane = new Pane();
         Scene titleScene = new Scene(titlePane, BOARD_X, BOARD_Y);
         Pane root = new Pane();
@@ -48,7 +49,8 @@ public class HelloFX extends Application {
         Scene shopScene = new Scene(shopPane, BOARD_X, BOARD_Y);
         Player p = new Player();
         
-        Button startWave = new Button("go to shop idk");
+
+        Button startWave = new Button("Start Wave");
         startWave.setFocusTraversable(false);
         shopPane.getChildren().add(startWave);
         scene.setOnMousePressed(e -> {
