@@ -69,6 +69,8 @@ public class HelloFX extends Application {
         newGame.setFocusTraversable(false);
         newGame.setTranslateX(BOARD_X/2-100);
         newGame.setTranslateY(BOARD_Y/2-50);
+        newGame.setScaleX(3);
+        newGame.setScaleY(3);
         AnimationTimer titleAnim = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -107,10 +109,10 @@ public class HelloFX extends Application {
         buyFirstItem.setTranslateY(400);
         buyFirstItem.setFocusTraversable(false);
         Label firstItemInfo = new Label();
-        firstItemInfo.setTranslateX(100);
-        firstItemInfo.setTranslateY(50);
+        firstItemInfo.setTranslateX(50);
+        firstItemInfo.setTranslateY(150);
         ImageView firstItemSprite = new ImageView();
-        firstItemSprite.setTranslateX(100);
+        firstItemSprite.setTranslateX(75);
         firstItemSprite.setTranslateY(500);
         shopPane.getChildren().add(buyFirstItem);
         shopPane.getChildren().add(firstItemInfo);
@@ -120,14 +122,14 @@ public class HelloFX extends Application {
         Button buySecondItem = new Button();
         buySecondItem.setScaleX(2);
         buySecondItem.setScaleY(2);
-        buySecondItem.setTranslateX(200);
+        buySecondItem.setTranslateX(300);
         buySecondItem.setTranslateY(400);
         buySecondItem.setFocusTraversable(false);
         Label secondItemInfo = new Label();
-        secondItemInfo.setTranslateX(200);
-        secondItemInfo.setTranslateY(50);
+        secondItemInfo.setTranslateX(250);
+        secondItemInfo.setTranslateY(150);
         ImageView secondItemSprite = new ImageView();
-        secondItemSprite.setTranslateX(200);
+        secondItemSprite.setTranslateX(275);
         secondItemSprite.setTranslateY(500);
         shopPane.getChildren().add(buySecondItem);
         shopPane.getChildren().add(secondItemInfo);
@@ -137,14 +139,14 @@ public class HelloFX extends Application {
         Button buyThirdItem = new Button();
         buyThirdItem.setScaleX(2);
         buyThirdItem.setScaleY(2);
-        buyThirdItem.setTranslateX(300);
+        buyThirdItem.setTranslateX(500);
         buyThirdItem.setTranslateY(400);
         buyThirdItem.setFocusTraversable(false);
         Label thirdItemInfo = new Label();
-        thirdItemInfo.setTranslateX(300);
-        thirdItemInfo.setTranslateY(50);
+        thirdItemInfo.setTranslateX(450);
+        thirdItemInfo.setTranslateY(150);
         ImageView thirdItemSprite = new ImageView();
-        thirdItemSprite.setTranslateX(300);
+        thirdItemSprite.setTranslateX(475);
         thirdItemSprite.setTranslateY(500);
         shopPane.getChildren().add(buyThirdItem);
         shopPane.getChildren().add(thirdItemInfo);
@@ -154,25 +156,33 @@ public class HelloFX extends Application {
         Button buyFourthItem = new Button();
         buyFourthItem.setScaleX(2);
         buyFourthItem.setScaleY(2);
-        buyFourthItem.setTranslateX(400);
+        buyFourthItem.setTranslateX(700);
         buyFourthItem.setTranslateY(400);
         buyFourthItem.setFocusTraversable(false);
         Label fourthItemInfo = new Label();
-        fourthItemInfo.setTranslateX(400);
-        fourthItemInfo.setTranslateY(50);
+        fourthItemInfo.setTranslateX(650);
+        fourthItemInfo.setTranslateY(150);
         ImageView fourthItemSprite = new ImageView();
-        fourthItemSprite.setTranslateX(400);
+        fourthItemSprite.setTranslateX(675);
         fourthItemSprite.setTranslateY(500);
         shopPane.getChildren().add(buyFourthItem);
         shopPane.getChildren().add(fourthItemInfo);
         shopPane.getChildren().add(fourthItemSprite);
 
-        p.setMoney(10000);
+        //refresh button
+        Button refresh = new Button("Refresh Stock");
+        refresh.setFocusTraversable(false);
+        refresh.setTranslateX(150);
+        refresh.setTranslateY(15);
+        refresh.setScaleX(1.5);
+        shopPane.getChildren().add(refresh);
 
         AnimationTimer shopAnim = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 moneyFlashTimer--;
+
+                refresh.setText("Refresh Stock: $" + shop.getRefreshNumber());
                 shopCash.setText("$" + p.getMoney());
                 if (moneyFlashTimer > 45) {
                     shopCash.setTextFill(Color.RED);
@@ -229,9 +239,9 @@ public class HelloFX extends Application {
                     buyThirdItem.setText("$" + itemCost);
                 }
                 if (shop.getStock()[3] == null) {
-                    thirdItemInfo.setText("");
-                    thirdItemSprite.setImage(null);
-                    buyThirdItem.setText("Out of Stock");
+                    fourthItemInfo.setText("");
+                    fourthItemSprite.setImage(null);
+                    buyFourthItem.setText("Out of Stock");
                 } else {
                     String fourthItemText = "";
                     fourthItemSprite.setImage(shop.getStock()[3].getIcon());
@@ -299,6 +309,13 @@ public class HelloFX extends Application {
                 } else {
                     moneyFlashTimer = 60;
                 }
+            }
+        });
+        refresh.setOnAction(e -> {
+            if (p.getMoney() >= shop.getRefreshNumber()) {
+                shop.refresh(p);
+            } else {
+                moneyFlashTimer = 60;
             }
         });
 
