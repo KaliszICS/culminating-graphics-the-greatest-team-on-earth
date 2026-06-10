@@ -5,17 +5,40 @@ import javafx.scene.layout.Pane;
 import javafx.scene.Node;
 
 import java.util.*;
-
+/**A class that handles the rounds of the game
+ * It handles the spawning of enemies and indicators according to the wave and difficulty of the round
+ * @author Eric Wang
+ */
 public class GameRound {
+    /**The wave number of the round */
     private int wave;
+
+    /**the difficulty of the round */
     private int difficulty;
+
+    /**the time of the round (in frames) */
     private int time;
+
+    /**The current time left in the round */
     private int currentTime;
+
+    /**the total number of enemy points that can be allocated to spawning */
     private int totalPoints;
+
+    /**a visible timer to show the amount of time left */
     private Label timer;
+
+    /**the arraylist of enemies */
     private ArrayList<Enemy> enemies;
+
+    /**An arraylist of timers to determine when to spawn the enemies */
     private ArrayList<Integer> timers;
 
+    /** A constructor that takes in a wave and difficulty value, and sets up the timer, and generates a wave of enemies according to the amount of avaliable enemy points
+     * 
+     * @param wave The wave of the round
+     * @param diff The difficulty of the round
+     */
     public GameRound(int wave, int diff) {
         this.wave = wave;
         this.difficulty = diff;
@@ -31,6 +54,14 @@ public class GameRound {
         this.generateSpawnTimers(this.enemies.size());
     }
 
+
+    /**Handles the spawning of enemies frame by frame, also updates the timer
+     * 
+     * @param root          The visual Pane that the sprites are put on
+     * @param sprites       An arraylist of sprites to store them for updating later
+     * @param movables      An arraylist of movables to add the enemies to
+     * @param collidables   An arraylist of collidables to add the enemies to
+     */
     public void spawnEnemies(Pane root, ArrayList<Node> sprites, ArrayList<IMovable> movables, ArrayList<ICollidable> collidables) {
         this.currentTime--;
         this.timer.setText(""+currentTime/60);
@@ -53,14 +84,26 @@ public class GameRound {
         }
     }
 
+    /**Gets the visual timer
+     * 
+     * @return getTimer();
+     */
     public Label getTimer() {
         return timer;
     }
 
+    /**Gets the amount of time left in frames
+     * 
+     * @return the current time left
+     */
     public int getCurrentTime() {
         return this.currentTime;
     }
 
+    /** A method that generates when the enemies will be spawned in the wave
+     * 
+     * @param num
+     */
     public void generateSpawnTimers(int num) {
         ArrayList<Integer> probabilities = new ArrayList<Integer>();
         for (int i = 0; i < this.time - 60; i++) {
@@ -72,6 +115,9 @@ public class GameRound {
         }
     }
 
+    /**The method that generates all the enemies according to the avaliable points
+     * Point allocation is limited in scope from a maximum of 1 second worth of points or a minimum of 0.05 seconds worth of points
+     */
     public void generateWave() {
         this.enemies = new ArrayList<Enemy>();
         int currentPoints = this.totalPoints;
@@ -87,6 +133,11 @@ public class GameRound {
         }
     }
 
+    /**Generates an enemy with randomly distributed stats based off a specific number of enemy points
+     * 
+     * @param points the number of enemy points to be allocated
+     * @return the enemy generated
+     */
     public Enemy generateEnemy(int points) {
         int[] pointDistribution = new int[4];
         for (int i = 0; i < points; i++) {

@@ -1,14 +1,19 @@
 package theGame;
 
 import java.util.*;
-
+/**A utility class with preloaded decks for easy use
+ * @author Eric Wang
+ */
 public class DeckBuilder {
 
+    /**A basic starter deck, archaic implementation
+     * 
+     * @return the starter deck with a variety of simple ammos (and one legendary)
+     */
     public static ArrayList<Ammo> starterDeck() {
         Ammo[] stuff = ItemLoader.loadAll();
         ArrayList<Ammo> deck = new ArrayList<Ammo>();
         deck.add(stuff[0]);
-        // deck.add(new RegularAmmo(20, 1, 400, "Shoot_Consume_1_3_Dmg_5_Size_30_Dura_60", 30, 30, 180, 100));
         deck.add(new RegularAmmo(5, 15, -400, "Cd_-10", 10, 0, 20, 0));
         deck.add(new RegularAmmo(5, 15, -400, "Cd_-10", 10, 0, 20, 0));
         deck.add(new RegularAmmo(5, 15, 100, "Dmg_+5", 10, 30, 20, 0));
@@ -24,6 +29,10 @@ public class DeckBuilder {
         return deck;
     }
 
+    /**a test deck
+     * 
+     * @return the test deck
+     */
     public static ArrayList<Ammo> idkIWasBored() {
         ArrayList<Ammo> deck = new ArrayList<Ammo>();
         Ammo[] stuff = ItemLoader.loadAll();
@@ -31,6 +40,11 @@ public class DeckBuilder {
         return deck;
     }
 
+    /**The only up to date deck with real implemented methods
+     * 
+     * @param ammopool the pool of every ammo in the game (gotten from itemloader class)
+     * @return the deck
+     */
     public static ArrayList<Ammo> testDeck(Ammo[] ammopool) {
         ArrayList<Ammo> deck = new ArrayList<Ammo>();
         deck.add((Ammo)ammopool[0].clone());
