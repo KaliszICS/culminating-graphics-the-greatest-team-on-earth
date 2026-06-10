@@ -17,9 +17,14 @@ public class Shop {
     //pass = xEavvjty5xLczcF
 
     public void refresh() {
-        int totalSize = allrelicssize + p.getAllAmmo().length; 
+        int totalSize = allrelicssize + allAmmo.length; 
         for (int i = 0; i < this.SLOT_NUMBER; i++) {
             int index = (int)(Math.random() * totalSize);
+            if (index <= allrelicssize-1) {
+                //implement relic load later
+            } else {
+                stock[i] = allAmmo[index-allrelicssize].clone();
+            }
         }
     }
 }

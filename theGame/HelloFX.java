@@ -213,9 +213,15 @@ public class HelloFX extends Application {
             hpNum.setScaleY(2);
             hpNum.setScaleX(2);
             hpNum.setTranslateX(50);
+            Label moneyNum = new Label();
+            moneyNum.setScaleY(2);
+            moneyNum.setScaleX(2);
+            moneyNum.setTranslateX(50);
+            moneyNum.setTranslateY(BOARD_Y-50);
             GameRound round = new GameRound(wave, diff);
             root.getChildren().add(hpBar);
             root.getChildren().add(hpNum);
+            root.getChildren().add(moneyNum);
             root.getChildren().add(round.getTimer());
             root.getChildren().add(bag);
             root.getChildren().add(bagNum);
@@ -230,6 +236,7 @@ public class HelloFX extends Application {
                 public void handle(long now) {
                     hpBar.setScaleX(5.0*(((double)p.getCurrentHp())/p.getMaxHp()));
                     hpNum.setText(p.getCurrentHp() + "/" + p.getMaxHp());
+                    moneyNum.setText("$" + p.getMoney());
                     bagNum.setText(""+p.getReserve().size());
                     discNum.setText(""+p.getDiscardSize());
                     // coords.setText("xcoord:" + p.getX() + " " + p.getY());
