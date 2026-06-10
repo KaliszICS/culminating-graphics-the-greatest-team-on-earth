@@ -63,7 +63,7 @@ public class Player implements ICollidable {
     /**the ammos that have been discarded during a wave*/
     private ArrayList<Ammo> discard;
 
-    /**the speed modifier (percents*/
+    /**the speed modifier (percents) */
     private double speedMod = 0;
 
     /**the reload modifier (percents) */
@@ -72,10 +72,11 @@ public class Player implements ICollidable {
     /**the cooldown modifier (percents) */
     private double cooldownMod = 0;
 
-    /**
-     * Repository of all ammo types available in the game.
-     */
+    /**Array of all ammo types available in the game.*/
     public final Ammo[] ALL_AMMO = ItemLoader.loadAll();
+
+    /**Array of all relic types available in the game.*/
+    public final Relic[] ALL_RELICS = ItemLoader.loadAllRelics();
 
     /**
      * Constructs a new player with default stats, position, starting ammo deck, and weapon.
@@ -138,7 +139,6 @@ public class Player implements ICollidable {
 
     /**
      * Handles collisions with another collidable object.
-     * <p>
      * If the player is not currently invulnerable and the
      * object is hostile, damage is taken and invulnerability
      * frames are granted.
@@ -243,6 +243,26 @@ public class Player implements ICollidable {
      */
     public Ammo[] getAllAmmo() {
         return ALL_AMMO;
+    }
+
+    /**
+     * Gets the list of all relics
+     * 
+     * @return the list of all relics
+     */
+    public Relic[] getAllRelic() {
+        return ALL_RELICS;
+    }
+
+    /**
+     * Activates all relics that fulfill a specific condition
+     * 
+     * @param condition
+     */
+    public void activateAllRelics(String condition) {
+        for (int i = 0; i < relicInv.size(); i++) {
+            relicInv.get(i).applyEffect(this, condition);
+        }
     }
 
     /**Gets the ammo inventory

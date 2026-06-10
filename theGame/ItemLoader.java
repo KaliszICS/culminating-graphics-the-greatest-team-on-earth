@@ -2,27 +2,51 @@ package theGame;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.*;
+
+import javafx.scene.image.Image;
 /**A utility class that loads items from a text file
  * Every item comes with its own format across 2 lines, the first being universal traits and the second being specifics to its item type
  * @author Eric Wang
  */
 public class ItemLoader {
-    private static int totalItems = 21;
+    private static int totalAmmos = 21;
+    private static int totalRelics = 1;
 
     /**Loads every item in the text file according to the number of total items
      * 
      * @return an ammo arraylist of all items (i didn't have the time to implement more than regular ammos)
      */
     public static Ammo[] loadAll() {
-        Ammo[] stuff = new Ammo[totalItems];
+        Ammo[] stuff = new Ammo[totalAmmos];
         File file = new File("/workspaces/culminating-graphics-the-greatest-team-on-earth/theGame/AmmoPresets.txt");
         try {
             Scanner in = new Scanner(file);
-            for (int i = 0; i < totalItems; i++) {
+            for (int i = 0; i < totalAmmos; i++) {
                 String[] l1 = in.nextLine().split(",");
                 String[] l2 = in.nextLine().split(" ");
                 stuff[i] = readAmmo(l1, l2);
+            }
+            in.close();
+        } catch (IOException e) {
+            System.out.println("what the fuck are you doing");
+        }
+        return stuff;
+    }
+
+    /**
+     * Loads every relic from a text file
+     * 
+     * @return the loaded relics
+     */
+    public static Relic[] loadAllRelics() {
+        Relic[] stuff = new Relic[totalRelics];
+        File file = new File("/workspaces/culminating-graphics-the-greatest-team-on-earth/theGame/AmmoPresets.txt");
+        try {
+            Scanner in = new Scanner(file);
+            for (int i = 0; i < totalRelics; i++) {
+                String[] l1 = in.nextLine().split(",");
+                stuff[i] = readRelic(l1);
             }
             in.close();
         } catch (IOException e) {
@@ -59,5 +83,23 @@ public class ItemLoader {
         int reloadTime = Integer.parseInt(l2[5]);
         int pierce = Integer.parseInt(l2[6]);
         return new RegularAmmo(id, name, type, rarity, effects, sprite, icon, damage, projSpd, recoil, size, duration, reloadTime, pierce);
+    }
+
+    /**
+     * Loads one relic based off a line
+     * 
+     * @param l1 the line
+     * @return returns the relic loaded
+     */
+    public static Relic readRelic(String[] l1) {
+        // line1: id name type rarity condition effects sprite
+        int id = Integer.parseInt(l1[0]);
+        String name = l1[1];
+        String type = l1[2];
+        int rarity = Integer.parseInt(l1[3]);
+        String condition = l1[4];
+        String[] effects = l1[5].split(",");
+        String sprite = l1[6];
+        return new Relic(rarity, type, name, id, new ArrayList<String>(List.of(effects)), condition, new Image(sprite));
     }
 }

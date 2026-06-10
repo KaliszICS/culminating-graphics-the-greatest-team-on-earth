@@ -11,7 +11,11 @@ import javafx.scene.image.Image;
  */
 public class Relic extends Item {
 
+    /**The condition */
     private String condition;
+
+    /**the Sprite */
+    private Image sprite;
 
     /**
      * Constructs a new Relic with the specified attributes.
@@ -22,14 +26,16 @@ public class Relic extends Item {
      * @param id        the unique identifier of the relic
      * @param effects   list of encoded effect strings (e.g., "Spd_0.1")
      * @param condition the trigger condition required to activate this relic
+     * @param image     the image url for the sprite of the item
      */
-    public Relic(int rarity, String type, String name, int id, ArrayList<String> effects, String condition) {
+    public Relic(int rarity, String type, String name, int id, ArrayList<String> effects, String condition, Image sprite) {
         super.setRarity(rarity);
         super.setType(type);
         super.setName(name);
         super.setId(id);
         super.setEffects(effects);
         this.condition = condition;
+        this.sprite = sprite;
     }
 
     /**
@@ -68,9 +74,14 @@ public class Relic extends Item {
         return condition.equals(trigger);
     }
 
+    /**
+     * Returns the icon of the relic
+     * 
+     * @return returns the icon
+     */
     @Override
     public Image getIcon() {
-        return new Image("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_2LPYRlundRD0JEWh_Hp5o5T4miDl42J2XQ&s");
+        return sprite;
     }
 
     /**
