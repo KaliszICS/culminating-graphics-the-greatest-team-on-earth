@@ -315,11 +315,13 @@ public class HelloFX extends Application {
                         } else if (movables.get(i) instanceof Enemy) {
                             ((Enemy)movables.get(i)).setTargetX(p.getX());
                             ((Enemy)movables.get(i)).setTargetY(p.getY());
-                            p.changeMoney(((Enemy)movables.get(i)).getValue());
                         }
                         sprites.get(i).setTranslateX(movables.get(i).getX());
                         sprites.get(i).setTranslateY(movables.get(i).getY());
                         if (movables.get(i).isDeleted()) {
+                            if (movables.get(i) instanceof Enemy) {
+                                p.changeMoney(((Enemy)movables.get(i)).getValue());
+                            }
                             collidables.remove(movables.get(i));
                             root.getChildren().remove(sprites.get(i));
                             movables.remove(i);

@@ -2,6 +2,8 @@ package theGame;
 
 import java.util.*;
 
+import javafx.scene.image.Image;
+
 /**
  * Abstract base class representing an item in the game.
  * Each item has a rarity, type, name, id, and an arraylist of effects. Concrete item implementations must provide behavior defined by the IEffectable interface.
@@ -22,6 +24,15 @@ abstract class Item implements IEffectable {
 
     /** The list of effects associated with the item. */
     protected ArrayList<String> effects;
+
+
+    /**
+     * Returns the icon used to represent this item.
+     *
+     * @return the icon
+     */
+    abstract Image getIcon();
+
 
     /**
      * Returns the rarity level of the item.

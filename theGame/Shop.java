@@ -12,11 +12,13 @@ public class Shop {
         allAmmo = p.getAllAmmo();
         int totalSize = allrelicssize + allAmmo.length;
         this.stock = new Item[this.SLOT_NUMBER];
-        refresh();
+        refresh(p);
     }
     //pass = xEavvjty5xLczcF
 
-    public void refresh() {
+    public void refresh(Player p) {
+        p.changeMoney(-refreshNo);
+        refreshNo++;
         int totalSize = allrelicssize + allAmmo.length; 
         for (int i = 0; i < this.SLOT_NUMBER; i++) {
             int index = (int)(Math.random() * totalSize);
@@ -26,5 +28,9 @@ public class Shop {
                 stock[i] = allAmmo[index-allrelicssize].clone();
             }
         }
+    }
+
+    public Item[] getStock() {
+        return stock;
     }
 }

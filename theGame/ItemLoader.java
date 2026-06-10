@@ -32,8 +32,10 @@ public class ItemLoader {
     }
 
     /**Reads an individual ammo item across 2 lines
+     * only supports regular ammo for now
      * line1: id name type rarity effects sprite
-        line2: damage projspd recoil size duration reloadtime pierce
+     * line2: damage projspd recoil size duration reloadtime pierce
+     *
      * @param l1 the first line
      * @param l2 the second line
      * @return the Ammo item interpreted from the two lines
