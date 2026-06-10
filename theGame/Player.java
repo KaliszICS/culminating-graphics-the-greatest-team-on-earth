@@ -8,12 +8,15 @@ public class Player implements ICollidable {
     private double xpos;
     private double ypos;
     private int reloadCooldown = 0;
-    private int hp;
+    private int currentHp;
+    private int maxHp;
     private int money;
     private int shield;
     private double size;
     private double speed;
     private Weapon weapon;
+    private ArrayList<Relic> relicInv;
+    private ArrayList<Ammo> ammoInv;
     private ArrayList<Ammo> reserve;
     private ArrayList<Ammo> discard;
     private double speedMod = 0;
@@ -26,13 +29,38 @@ public class Player implements ICollidable {
         this.targety = 240;
         this.xpos = 300;
         this.ypos = 240;
-        this.hp = 10;
+        this.maxHp = 10;
+        this.currentHp = this.maxHp;
         this.money = 100;
         this.size = 25;
         this.speed = 7.5;
+        this.ammoInv = new ArrayList<Ammo>(DeckBuilder.testDeck(ALL_AMMO));
         this.discard = new ArrayList<Ammo>();
-        this.reserve = new ArrayList<Ammo>(DeckBuilder.testDeck(ALL_AMMO));
+        this.reserve = new ArrayList<Ammo>();
+        for (int i = 0; i < this.ammoInv.size(); i++) {
+            this.reserve.add((Ammo)this.ammoInv.get(i).clone());
+        }
+        Collections.shuffle(this.reserve);
         this.weapon = new DefaultWeapon(reserve);
+    }
+
+    public void reset() {
+        this.targetx = 300;
+        this.targety = 240;
+        this.xpos = 300;
+        this.ypos = 240;
+        this.currentHp = this.maxHp;
+        this.speedMod = 0;
+        this.reloadMod = 0;
+        this.cooldownMod = 0;
+        this.discard.clear();
+        this.weapon.getCartridge().clear();
+        this.reserve.clear();
+        for (int i = 0; i < this.ammoInv.size(); i++) {
+            this.reserve.add((Ammo)this.ammoInv.get(i).clone());
+        }
+        Collections.shuffle(this.reserve);
+        this.weapon.reload(reserve);
     }
 
     public void collide (ICollidable col) {

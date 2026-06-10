@@ -30,56 +30,20 @@ public class HelloFX extends Application {
     double rotAngle = 0;
     boolean firing = false;
     boolean specialing = false;
+    int wave = 1;
+    int diff = 1;
     
     @Override
     public void start(Stage stage) {
         Pane root = new Pane();
         Scene scene = new Scene(root, BOARD_X, BOARD_Y);
-        Pane root2 = new Pane();
-        Scene scene2 = new Scene(root2, BOARD_X, BOARD_Y);
+        Pane shopPane = new Pane();
+        Scene shopScene = new Scene(shopPane, BOARD_X, BOARD_Y);
         Player p = new Player();
-        Circle circle = new Circle();
-        circle.setRadius(p.getSize());
-        circle.setCenterX(p.getX());
-        circle.setCenterY(p.getY());
-        Rectangle rectangle = new Rectangle();
-        root.getChildren().add(circle);
-        root.getChildren().add(rectangle);
-        rectangle.setWidth(p.getSize()+15);
-        rectangle.setHeight(p.getSize()*0.4);
-        ArrayList<IMovable> movables = new ArrayList<IMovable>();
-        ArrayList<ICollidable> collidables = new ArrayList<ICollidable>();
-        collidables.add(p);
-        ArrayList<Node> sprites = new ArrayList<Node>();
-        Label coords = new Label("xcoord" + p.getX());
-        Rectangle bag = new Rectangle(50, 50);
-        bag.setX(BOARD_X - 65);
-        bag.setY(15);
-        Label bagNum = new Label("hi");
-        bagNum.setTranslateX(BOARD_X-45);
-        bagNum.setTranslateY(30);
-        bagNum.setTextFill(Color.WHITE);
-        bagNum.setScaleX(3);
-        bagNum.setScaleY(3);
-        Rectangle disc = new Rectangle(50, 50);
-        disc.setX(BOARD_X - 135);
-        disc.setY(15);
-        Label discNum = new Label("hi");
-        discNum.setTranslateX(BOARD_X-115);
-        discNum.setTranslateY(30);
-        discNum.setTextFill(Color.WHITE);
-        discNum.setScaleX(3);
-        discNum.setScaleY(3);
-        GameRound round = new GameRound();
-        root.getChildren().add(round.getTimer());
-        root.getChildren().add(bag);
-        root.getChildren().add(bagNum);
-        root.getChildren().add(disc);
-        root.getChildren().add(discNum);
-        root.getChildren().add(coords);
-        ArrayList<Ammo> currentCarts = new ArrayList<Ammo>();
-        HashMap<Ammo, AmmoDisplayed> cartData = new HashMap<Ammo, AmmoDisplayed>();
-        // new Relic(1, "", "", 1, new ArrayList<>(List.of("Cd_-100", "Rld_-100", "Spd_+50")), "Start").applyEffect(p, "Start");
+        
+        Button startWave = new Button("go to shop idk");
+        startWave.setFocusTraversable(false);
+        shopPane.getChildren().add(startWave);
         scene.setOnMousePressed(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 firing = true;
@@ -128,171 +92,227 @@ public class HelloFX extends Application {
                 movingRight = false;
             }
             if (e.getCode() == KeyCode.DOWN) {
-                movingDown = false;
-            }
+               movingDown = false;
+           }
             if (e.getCode() == KeyCode.LEFT) {
                 movingLeft = false;
             }
         });
-        AnimationTimer gameplayStage = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                bagNum.setText(""+p.getReserve().size());
-                discNum.setText(""+p.getDiscardSize());
-                coords.setText("xcoord:" + p.getX() + " " + p.getY());
-                round.spawnEnemies(root, sprites, movables, collidables);
-                
-                for (int i = 0; i < p.getCartridge().size(); i++) {
-                    if (cartData.get(p.getCartridge().get(i)) == null) {
-                        cartData.put(p.getCartridge().get(i), new AmmoDisplayed(BOARD_X-60, 40, p.getCartridge().get(i), p.getReloadTime()));
-                        currentCarts.add(p.getCartridge().get(i));
-                        root.getChildren().add(cartData.get(p.getCartridge().get(i)).getShape());
-                    }
-                    cartData.get(p.getCartridge().get(i)).setTargetX(BOARD_X - 60);
-                    cartData.get(p.getCartridge().get(i)).setTargetY(15*i + 70);
-                    cartData.get(p.getCartridge().get(i)).move();
-                }
+        startWave.setOnAction(e -> {
+            root.getChildren().clear();
+            p.reset();
+            movingUp = false;
+            movingDown = false;
+            movingLeft = false;
+            movingRight = false;
+            mousex = 0;
+            mousey = 0;
+            rotAngle = 0;
+            firing = false;
+            specialing = false;
 
-                if (firing && p.getReloadCooldown() <= 0) {
-                    Ammo temp = p.shoot(mousex, mousey);
-                    // movables.add(new AmmoDisplayed(cartData.get(temp).getX(), cartData.get(temp).getY(), BOARD_X-130, 30));
-                    // sprites.add(((AmmoDisplayed)movables.get(movables.size()-1)).getShape());
-                    // root.getChildren().add(sprites.get(sprites.size()-1));
-                    // root.getChildren().remove(cartData.get(temp).getShape());
-                    // cartData.remove(temp);
-                    Ammo shot = (Ammo)temp.clone();
-                    shot.setX(p.getX());
-                    shot.setY(p.getY());
-                    shot.setXVelocity(shot.getProjSpd()*Math.cos(rotAngle));
-                    shot.setYVelocity(shot.getProjSpd()*Math.sin(rotAngle));
-                    movables.add(shot);
-                    collidables.add(shot);
-                    Circle img = new Circle(shot.getSize());
-                    img.setFill(new ImagePattern(shot.getShape()));
-                    sprites.add(img);
-                    root.getChildren().add(sprites.get(sprites.size()-1));
-                } else if (specialing && p.getReloadCooldown() <= 0) {
-                    p.special();
-                }
-
-                for (int i = 0; i < currentCarts.size(); i++) {
-                    if (!p.getCartridge().contains(currentCarts.get(i))) {
-                        if (p.getReserve().contains(currentCarts.get(i))) {
-                            movables.add(new AmmoDisplayed(cartData.get(currentCarts.get(i)).getX(), cartData.get(currentCarts.get(i)).getY(), currentCarts.get(i).getIcon(), BOARD_X-130, 30));
-                        } else if (p.getDiscard().contains(currentCarts.get(i))) {
-                            movables.add(new AmmoDisplayed(cartData.get(currentCarts.get(i)).getX(), cartData.get(currentCarts.get(i)).getY(), currentCarts.get(i).getIcon(), BOARD_X-130, 30));
-                        } else {
-                            movables.add(new AmmoDisplayed(cartData.get(currentCarts.get(i)).getX(), cartData.get(currentCarts.get(i)).getY(), currentCarts.get(i).getIcon(), BOARD_X+250, 250));
+            Circle circle = new Circle();
+            circle.setRadius(p.getSize());
+            circle.setCenterX(p.getX());
+            circle.setCenterY(p.getY());
+            Rectangle rectangle = new Rectangle();
+            root.getChildren().add(circle);
+            root.getChildren().add(rectangle);
+            rectangle.setWidth(p.getSize()+15);
+            rectangle.setHeight(p.getSize()*0.4);
+            ArrayList<IMovable> movables = new ArrayList<IMovable>();
+            ArrayList<ICollidable> collidables = new ArrayList<ICollidable>();
+            collidables.add(p);
+            ArrayList<Node> sprites = new ArrayList<Node>();
+            Label coords = new Label("xcoord" + p.getX());
+            Rectangle bag = new Rectangle(50, 50);
+            bag.setX(BOARD_X - 65);
+            bag.setY(15);
+            Label bagNum = new Label("hi");
+            bagNum.setTranslateX(BOARD_X-45);
+            bagNum.setTranslateY(30);
+            bagNum.setTextFill(Color.WHITE);
+            bagNum.setScaleX(3);
+            bagNum.setScaleY(3);
+            Rectangle disc = new Rectangle(50, 50);
+            disc.setX(BOARD_X - 135);
+            disc.setY(15);
+            Label discNum = new Label("hi");
+            discNum.setTranslateX(BOARD_X-115);
+            discNum.setTranslateY(30);
+            discNum.setTextFill(Color.WHITE);
+            discNum.setScaleX(3);
+            discNum.setScaleY(3);
+            GameRound round = new GameRound(wave, diff);
+            root.getChildren().add(round.getTimer());
+            root.getChildren().add(bag);
+            root.getChildren().add(bagNum);
+            root.getChildren().add(disc);
+            root.getChildren().add(discNum);
+            root.getChildren().add(coords);
+            ArrayList<Ammo> currentCarts = new ArrayList<Ammo>();
+            HashMap<Ammo, AmmoDisplayed> cartData = new HashMap<Ammo, AmmoDisplayed>();
+            // new Relic(1, "", "", 1, new ArrayList<>(List.of("Cd_-100", "Rld_-100", "Spd_+50")), "Start").applyEffect(p, "Start");
+            new AnimationTimer() {
+                @Override
+                public void handle(long now) {
+                    bagNum.setText(""+p.getReserve().size());
+                    discNum.setText(""+p.getDiscardSize());
+                    coords.setText("xcoord:" + p.getX() + " " + p.getY());
+                    round.spawnEnemies(root, sprites, movables, collidables);
+                    
+                    for (int i = 0; i < p.getCartridge().size(); i++) {
+                        if (cartData.get(p.getCartridge().get(i)) == null) {
+                            cartData.put(p.getCartridge().get(i), new AmmoDisplayed(BOARD_X-60, 40, p.getCartridge().get(i), p.getReloadTime()));
+                            currentCarts.add(p.getCartridge().get(i));
+                            root.getChildren().add(cartData.get(p.getCartridge().get(i)).getShape());
                         }
-                        sprites.add(((AmmoDisplayed)movables.get(movables.size()-1)).getShape());
+                        cartData.get(p.getCartridge().get(i)).setTargetX(BOARD_X - 60);
+                        cartData.get(p.getCartridge().get(i)).setTargetY(15*i + 70);
+                        cartData.get(p.getCartridge().get(i)).move();
+                    }
+
+                    if (firing && p.getReloadCooldown() <= 0) {
+                        Ammo temp = p.shoot(mousex, mousey);
+                        // movables.add(new AmmoDisplayed(cartData.get(temp).getX(), cartData.get(temp).getY(), BOARD_X-130, 30));
+                        // sprites.add(((AmmoDisplayed)movables.get(movables.size()-1)).getShape());
+                        // root.getChildren().add(sprites.get(sprites.size()-1));
+                        // root.getChildren().remove(cartData.get(temp).getShape());
+                        // cartData.remove(temp);
+                        Ammo shot = (Ammo)temp.clone();
+                        shot.setX(p.getX());
+                        shot.setY(p.getY());
+                        shot.setXVelocity(shot.getProjSpd()*Math.cos(rotAngle));
+                        shot.setYVelocity(shot.getProjSpd()*Math.sin(rotAngle));
+                        movables.add(shot);
+                        collidables.add(shot);
+                        Circle img = new Circle(shot.getSize());
+                        img.setFill(new ImagePattern(shot.getShape()));
+                        sprites.add(img);
                         root.getChildren().add(sprites.get(sprites.size()-1));
-                        root.getChildren().remove(cartData.get(currentCarts.get(i)).getShape());
-                        cartData.remove(currentCarts.get(i));
-                        currentCarts.remove(i);
-                        i--;
+                    } else if (specialing && p.getReloadCooldown() <= 0) {
+                        p.special();
                     }
-                }
 
-                rotAngle = -Math.atan2(mousex-p.getX(), mousey-p.getY())+Math.PI/2;
-                rectangle.setRotate(rotAngle/Math.PI*180);
+                    for (int i = 0; i < currentCarts.size(); i++) {
+                        if (!p.getCartridge().contains(currentCarts.get(i))) {
+                            if (p.getReserve().contains(currentCarts.get(i))) {
+                                movables.add(new AmmoDisplayed(cartData.get(currentCarts.get(i)).getX(), cartData.get(currentCarts.get(i)).getY(), currentCarts.get(i).getIcon(), BOARD_X-130, 30));
+                            } else if (p.getDiscard().contains(currentCarts.get(i))) {
+                                movables.add(new AmmoDisplayed(cartData.get(currentCarts.get(i)).getX(), cartData.get(currentCarts.get(i)).getY(), currentCarts.get(i).getIcon(), BOARD_X-130, 30));
+                            } else {
+                                movables.add(new AmmoDisplayed(cartData.get(currentCarts.get(i)).getX(), cartData.get(currentCarts.get(i)).getY(), currentCarts.get(i).getIcon(), BOARD_X+250, 250));
+                            }
+                            sprites.add(((AmmoDisplayed)movables.get(movables.size()-1)).getShape());
+                            root.getChildren().add(sprites.get(sprites.size()-1));
+                            root.getChildren().remove(cartData.get(currentCarts.get(i)).getShape());
+                            cartData.remove(currentCarts.get(i));
+                            currentCarts.remove(i);
+                            i--;
+                        }
+                    }
 
-                if ((p.getTargetX() <= p.getSize() && p.getX() <= p.getSize() + 5)) {
-                    p.setTargetX(2 * p.getSize() - p.getTargetX());
-                }
-                if ((p.getTargetX() >= BOARD_X - p.getSize() && p.getX() >= BOARD_X - p.getSize() - 5)) {
-                    p.setTargetX(2*BOARD_X - 2*p.getSize() - p.getTargetX()); 
-                }
-                if ((p.getTargetY() <= p.getSize() && p.getY() <= p.getSize() + 5)) {
-                    p.setTargetY(2 * p.getSize() - p.getTargetY());
-                }
-                if ((p.getTargetY() >= BOARD_Y - p.getSize() && p.getY() >= BOARD_Y - p.getSize() - 5)) {
-                    p.setTargetY(2*BOARD_Y - 2*p.getSize() - p.getTargetY()); 
-                }
-                for (int i = 0; i < movables.size(); i++) {
-                    movables.get(i).move();
-                    if (movables.get(i) instanceof RegularAmmo) {
-                        ((RegularAmmo)movables.get(i)).timerDown();
-                    } else if (movables.get(i) instanceof MeleeEnemy) {
-                        ((MeleeEnemy)movables.get(i)).setTargetX(p.getX());
-                        ((MeleeEnemy)movables.get(i)).setTargetY(p.getY());
+                    rotAngle = -Math.atan2(mousex-p.getX(), mousey-p.getY())+Math.PI/2;
+                    rectangle.setRotate(rotAngle/Math.PI*180);
+
+                    if ((p.getTargetX() <= p.getSize() && p.getX() <= p.getSize() + 5)) {
+                        p.setTargetX(2 * p.getSize() - p.getTargetX());
                     }
-                    sprites.get(i).setTranslateX(movables.get(i).getX());
-                    sprites.get(i).setTranslateY(movables.get(i).getY());
-                    if (movables.get(i).isDeleted()) {
-                        collidables.remove(movables.get(i));
-                        root.getChildren().remove(sprites.get(i));
-                        movables.remove(i);
-                        sprites.remove(i);
-                        i--;
+                    if ((p.getTargetX() >= BOARD_X - p.getSize() && p.getX() >= BOARD_X - p.getSize() - 5)) {
+                        p.setTargetX(2*BOARD_X - 2*p.getSize() - p.getTargetX()); 
                     }
-                }
-                for (int i = 0; i < collidables.size(); i++) {
-                    for (int j = i+1; j < collidables.size(); j++) {
-                        if ((collidables.get(i).getClass()) != (collidables.get(j).getClass())) {
-                            if (
-                                collidables.get(i).getSize() + collidables.get(j).getSize() >=
-                                Math.sqrt(
-                                    Math.pow(collidables.get(i).getX()-collidables.get(j).getX(), 2) +
-                                    Math.pow(collidables.get(i).getY()-collidables.get(j).getY(), 2)
-                                )
-                            ) {
-                                if (!collidables.get(i).isImmune(collidables.get(j)) && !collidables.get(j).isImmune(collidables.get(i))) {
-                                    if (!(collidables.get(i) instanceof Ammo)) {
-                                        DamageNumber num = new DamageNumber(collidables.get(i).getX(), collidables.get(i).getY(), collidables.get(j).getDmg());
-                                        movables.add(num);
-                                        sprites.add(num.getShape());
-                                        root.getChildren().add(num.getShape());
+                    if ((p.getTargetY() <= p.getSize() && p.getY() <= p.getSize() + 5)) {
+                        p.setTargetY(2 * p.getSize() - p.getTargetY());
+                    }
+                    if ((p.getTargetY() >= BOARD_Y - p.getSize() && p.getY() >= BOARD_Y - p.getSize() - 5)) {
+                        p.setTargetY(2*BOARD_Y - 2*p.getSize() - p.getTargetY()); 
+                    }
+                    for (int i = 0; i < movables.size(); i++) {
+                        movables.get(i).move();
+                        if (movables.get(i) instanceof RegularAmmo) {
+                            ((RegularAmmo)movables.get(i)).timerDown();
+                        } else if (movables.get(i) instanceof MeleeEnemy) {
+                            ((MeleeEnemy)movables.get(i)).setTargetX(p.getX());
+                            ((MeleeEnemy)movables.get(i)).setTargetY(p.getY());
+                        }
+                        sprites.get(i).setTranslateX(movables.get(i).getX());
+                        sprites.get(i).setTranslateY(movables.get(i).getY());
+                        if (movables.get(i).isDeleted()) {
+                            collidables.remove(movables.get(i));
+                            root.getChildren().remove(sprites.get(i));
+                            movables.remove(i);
+                            sprites.remove(i);
+                            i--;
+                        }
+                    }
+                    for (int i = 0; i < collidables.size(); i++) {
+                        for (int j = i+1; j < collidables.size(); j++) {
+                            if ((collidables.get(i).getClass()) != (collidables.get(j).getClass())) {
+                                if (
+                                    collidables.get(i).getSize() + collidables.get(j).getSize() >=
+                                    Math.sqrt(
+                                        Math.pow(collidables.get(i).getX()-collidables.get(j).getX(), 2) +
+                                        Math.pow(collidables.get(i).getY()-collidables.get(j).getY(), 2)
+                                    )
+                                ) {
+                                    if (!collidables.get(i).isImmune(collidables.get(j)) && !collidables.get(j).isImmune(collidables.get(i))) {
+                                        if (!(collidables.get(i) instanceof Ammo)) {
+                                            DamageNumber num = new DamageNumber(collidables.get(i).getX(), collidables.get(i).getY(), collidables.get(j).getDmg());
+                                            movables.add(num);
+                                            sprites.add(num.getShape());
+                                            root.getChildren().add(num.getShape());
+                                        }
+                                        collidables.get(i).collide(collidables.get(j));
+                                        if (!(collidables.get(j) instanceof Ammo)) {
+                                            DamageNumber num = new DamageNumber(collidables.get(j).getX(), collidables.get(j).getY(), collidables.get(i).getDmg());
+                                            movables.add(num);
+                                            sprites.add(num.getShape());
+                                            root.getChildren().add(num.getShape());
+                                        }
+                                        collidables.get(j).collide(collidables.get(i));
                                     }
-                                    collidables.get(i).collide(collidables.get(j));
-                                    if (!(collidables.get(j) instanceof Ammo)) {
-                                        DamageNumber num = new DamageNumber(collidables.get(j).getX(), collidables.get(j).getY(), collidables.get(i).getDmg());
-                                        movables.add(num);
-                                        sprites.add(num.getShape());
-                                        root.getChildren().add(num.getShape());
-                                    }
-                                    collidables.get(j).collide(collidables.get(i));
                                 }
                             }
                         }
                     }
-                }
-                p.move();
+                    p.move();
 
-                rectangle.setX(p.getX() + Math.cos(rotAngle)*rectangle.getWidth()/2 - rectangle.getWidth()/2);
-                rectangle.setY(p.getY() - 0.5 * rectangle.getHeight() + Math.sin(rotAngle)*rectangle.getWidth()/2);
-                circle.setCenterX(p.getX());
-                circle.setCenterY(p.getY());
+                    rectangle.setX(p.getX() + Math.cos(rotAngle)*rectangle.getWidth()/2 - rectangle.getWidth()/2);
+                    rectangle.setY(p.getY() - 0.5 * rectangle.getHeight() + Math.sin(rotAngle)*rectangle.getWidth()/2);
+                    circle.setCenterX(p.getX());
+                    circle.setCenterY(p.getY());
 
-                double vert = 0;
-                double horiz = 0;
-                if (movingUp) {
-                    vert -= p.getSpeed();
-                }
-                if (movingDown) {
-                    vert += p.getSpeed();
-                }
-                if (movingLeft) {
-                    horiz -= p.getSpeed();
-                }
-                if (movingRight) {
-                    horiz += p.getSpeed();
-                }
-                if (vert != 0 && horiz != 0) {
-                    vert /= Math.sqrt(2);
-                    horiz /= Math.sqrt(2);
-                }
+                    double vert = 0;
+                    double horiz = 0;
+                    if (movingUp) {
+                        vert -= p.getSpeed();
+                    }
+                    if (movingDown) {
+                        vert += p.getSpeed();
+                    }
+                    if (movingLeft) {
+                        horiz -= p.getSpeed();
+                    }
+                    if (movingRight) {
+                        horiz += p.getSpeed();
+                    }
+                    if (vert != 0 && horiz != 0) {
+                        vert /= Math.sqrt(2);
+                        horiz /= Math.sqrt(2);
+                    }
 
-                p.setTargetX(p.getTargetX() + horiz);
-                p.setTargetY(p.getTargetY() + vert);
-            }
-        };
-        Button changestage = new Button("go to shop idk");
-        changestage.setFocusTraversable(false);
-        root.getChildren().add(changestage);
-        changestage.setOnAction(e -> {
-            gameplayStage.start();
+                    p.setTargetX(p.getTargetX() + horiz);
+                    p.setTargetY(p.getTargetY() + vert);
+                    if (round.getCurrentTime() <= 0) {
+                        wave += 10;
+                        stage.setScene(shopScene);
+                        this.stop();
+                    }
+                }
+            }.start();
+            stage.setScene(scene);
         });
-        stage.setScene(scene);
+        stage.setScene(shopScene);
         stage.show();
     }
 

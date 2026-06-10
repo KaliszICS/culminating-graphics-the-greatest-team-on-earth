@@ -15,14 +15,13 @@ public class GameRound {
     private Label timer;
     private ArrayList<Enemy> enemies;
     private ArrayList<Integer> timers;
-    private double[][] spawnLocations;
 
-    public GameRound() {
-        this.wave = 1;
-        this.difficulty = 1;
-        this.time = 21*60+30*this.wave;
+    public GameRound(int wave, int diff) {
+        this.wave = wave;
+        this.difficulty = diff;
+        this.time = 5*60+30*wave;
         this.currentTime = this.time;
-        this.totalPoints = 10+(int)(10*Math.pow(1+((double)this.wave/5), 2)*this.difficulty);
+        this.totalPoints = 10+(int)(10*Math.pow(1+((double)this.wave/5), 2)*diff);
         this.timer = new Label();
         this.timer.setTranslateY(30);
         this.timer.setTranslateX(500);
@@ -30,7 +29,6 @@ public class GameRound {
         this.timer.setScaleY(5);
         this.generateWave();
         this.generateSpawnTimers(this.enemies.size());
-        this.spawnLocations = new double[this.enemies.size()][2];
     }
 
     public void spawnEnemies(Pane root, ArrayList<Node> sprites, ArrayList<IMovable> movables, ArrayList<ICollidable> collidables) {
@@ -59,12 +57,13 @@ public class GameRound {
         return timer;
     }
 
+    public int getCurrentTime() {
+        return this.currentTime;
+    }
+
     public void generateSpawnTimers(int num) {
         ArrayList<Integer> probabilities = new ArrayList<Integer>();
         for (int i = 0; i < this.time - 60; i++) {
-            // for (int j = 0; j < 5 * Math.sin(3*(((double)i/this.time)*(9*Math.PI/2))) + 5; j++) {
-            //     probabilities.add(i);
-            // }
             probabilities.add(i);
         }
         this.timers = new ArrayList<Integer>();
