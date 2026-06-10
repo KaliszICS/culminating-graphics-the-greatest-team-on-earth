@@ -1,5 +1,5 @@
-0,Black Hole,Regular Ammo,5,Shoot_Consume_1_3_Dmg_5_Size_5_Dura_15,https://www.pngarts.com/files/8/Space-Black-Hole-Transparent-Image.png,https://thumbs.dreamstime.com/b/beautiful-space-background-cosmoc-art-elements-image-furnished-nasa-beautiful-space-background-cosmoc-art-elements-145315589.jpg
-20 1 400 30 30 180 100
+0,Black Hole,Regular Ammo,5,Shoot_Consume_1_3_Dmg_5_Size_10_Dura_15,https://www.pngarts.com/files/8/Space-Black-Hole-Transparent-Image.png,https://thumbs.dreamstime.com/b/beautiful-space-background-cosmoc-art-elements-image-furnished-nasa-beautiful-space-background-cosmoc-art-elements-145315589.jpg
+10 1 400 30 30 180 100
 1,Basic,Regular Ammo,1,,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmbeI2P8KWT2rIFGe3uCm66T7-uyhxtuvKrQ&s,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmbeI2P8KWT2rIFGe3uCm66T7-uyhxtuvKrQ&s
 5 10 100 30 30 30 0
 2,Six Seven,Regular Ammo,4,Shoot_Exhaust Shoot_Create_6_3,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_2LPYRlundRD0JEWh_Hp5o5T4miDl42J2XQ&s,https://cdn-icons-png.flaticon.com/512/9929/9929246.png

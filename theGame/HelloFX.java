@@ -1,7 +1,8 @@
 package theGame;
 
 import javafx.application.Application;
-
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.animation.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -36,6 +37,8 @@ public class HelloFX extends Application {
     boolean specialing = false;
     int wave = 1;
     int diff = 1;
+    int titleTimer = 0;
+    Player p;
     
     /**The game, basically */
     @Override
@@ -47,12 +50,45 @@ public class HelloFX extends Application {
         Scene scene = new Scene(root, BOARD_X, BOARD_Y);
         Pane shopPane = new Pane();
         Scene shopScene = new Scene(shopPane, BOARD_X, BOARD_Y);
-        Player p = new Player();
+        Pane deathPane = new Pane();
+        Scene deathScene = new Scene(deathPane, BOARD_X, BOARD_Y);
+        p = new Player();
         
+        /*
+        * THE TITLE SCREEN
+        */
+        Label theText = new Label("A game by the \"greatest team on earth\"");
+        titlePane.getChildren().add(theText);
+        theText.setTranslateX(BOARD_X/2-100);
+        theText.setTranslateY(BOARD_Y/2-150);
+        Button newGame = new Button("New Game");
+        newGame.setFocusTraversable(false);
+        newGame.setTranslateX(BOARD_X/2-100);
+        newGame.setTranslateY(BOARD_Y/2-50);
+        AnimationTimer titleAnim = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                titleTimer++;
+                if (titleTimer < 120) {
+                    theText.setScaleX(titleTimer/40.0);
+                    theText.setScaleY(titleTimer/40.0);
+                } else if (titleTimer == 180) {
+                    theText.setText("By Eric Wang and Lukas Herljevic");
+                } else if (titleTimer == 240) {
+                    theText.setText("Brotato if it was bad");
+                } else if (titleTimer == 300) {
+                    titlePane.getChildren().add(newGame);
+                }
+            }
+        };
 
-        Button startWave = new Button("Start Wave");
-        startWave.setFocusTraversable(false);
-        shopPane.getChildren().add(startWave);
+        /* 
+         * The Shop
+         */
+        Button nextWave = new Button("Next Wave");
+        shopPane.getChildren().add(nextWave);
+
+        titleAnim.start();
         scene.setOnMousePressed(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY)) {
                 firing = true;
@@ -107,7 +143,7 @@ public class HelloFX extends Application {
                 movingLeft = false;
             }
         });
-        startWave.setOnAction(e -> {
+        EventHandler<ActionEvent> gameAction = (e -> {
             root.getChildren().clear();
             p.reset();
             movingUp = false;
@@ -133,7 +169,7 @@ public class HelloFX extends Application {
             ArrayList<ICollidable> collidables = new ArrayList<ICollidable>();
             collidables.add(p);
             ArrayList<Node> sprites = new ArrayList<Node>();
-            Label coords = new Label("xcoord" + p.getX());
+            // Label coords = new Label("xcoord" + p.getX());
             Rectangle bag = new Rectangle(50, 50);
             bag.setX(BOARD_X - 65);
             bag.setY(15);
@@ -152,22 +188,32 @@ public class HelloFX extends Application {
             discNum.setTextFill(Color.WHITE);
             discNum.setScaleX(3);
             discNum.setScaleY(3);
+            Rectangle hpBar = new Rectangle(100, 40);
+            Label hpNum = new Label();
+            hpNum.setTextFill(Color.WHITE);
+            hpNum.setScaleY(2);
+            hpNum.setScaleX(2);
+            hpNum.setTranslateX(50);
             GameRound round = new GameRound(wave, diff);
+            root.getChildren().add(hpBar);
+            root.getChildren().add(hpNum);
             root.getChildren().add(round.getTimer());
             root.getChildren().add(bag);
             root.getChildren().add(bagNum);
             root.getChildren().add(disc);
             root.getChildren().add(discNum);
-            root.getChildren().add(coords);
+            // root.getChildren().add(coords);
             ArrayList<Ammo> currentCarts = new ArrayList<Ammo>();
             HashMap<Ammo, AmmoDisplayed> cartData = new HashMap<Ammo, AmmoDisplayed>();
             // new Relic(1, "", "", 1, new ArrayList<>(List.of("Cd_-100", "Rld_-100", "Spd_+50")), "Start").applyEffect(p, "Start");
             new AnimationTimer() {
                 @Override
                 public void handle(long now) {
+                    hpBar.setScaleX(5.0*(((double)p.getCurrentHp())/p.getMaxHp()));
+                    hpNum.setText(p.getCurrentHp() + "/" + p.getMaxHp());
                     bagNum.setText(""+p.getReserve().size());
                     discNum.setText(""+p.getDiscardSize());
-                    coords.setText("xcoord:" + p.getX() + " " + p.getY());
+                    // coords.setText("xcoord:" + p.getX() + " " + p.getY());
                     round.spawnEnemies(root, sprites, movables, collidables);
                     
                     for (int i = 0; i < p.getCartridge().size(); i++) {
@@ -321,7 +367,10 @@ public class HelloFX extends Application {
             }.start();
             stage.setScene(scene);
         });
-        stage.setScene(shopScene);
+
+        newGame.setOnAction(gameAction);
+        nextWave.setOnAction(gameAction);
+        stage.setScene(titleScene);
         stage.show();
     }
 

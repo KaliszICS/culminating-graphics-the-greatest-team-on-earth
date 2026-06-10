@@ -89,7 +89,7 @@ public class Player implements ICollidable {
         this.xpos = 300;
         this.ypos = 240;
 
-        this.maxHp = 10;
+        this.maxHp = 100;
         this.currentHp = this.maxHp;
 
         this.money = 100;
@@ -294,8 +294,25 @@ public class Player implements ICollidable {
      *
      * @return thorn damage value
      */
+    @Override
     public int getDmg() {
         return this.thorns;
+    }
+
+    /**Gets the current hp of the player
+     * 
+     * @return the current hp
+     */
+    public int getCurrentHp() {
+        return this.currentHp;
+    }
+
+    /**Gets the max hp of the player
+     * 
+     * @return the max hp
+     */
+    public int getMaxHp() {
+        return this.maxHp;
     }
 
     /**

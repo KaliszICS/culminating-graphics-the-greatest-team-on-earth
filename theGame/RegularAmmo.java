@@ -26,7 +26,7 @@ public class RegularAmmo extends Ammo {
     private ArrayList<ICollidable> immunityList = new ArrayList<>();
 
     /** a list of all timers for all immunities currently active */
-    HashMap<ICollidable, Integer> immunityTimers = new HashMap<>();
+    private HashMap<ICollidable, Integer> immunityTimers = new HashMap<>();
 
     /**
      * Archaic constructor used before fileloading, takes in less stuff
@@ -206,6 +206,29 @@ public class RegularAmmo extends Ammo {
     @Override
     public void upgrade() {
         
+    }
+
+    /**Clones the current GameAmmo object, and resets the immunity timers so they aren't shared between different instances
+     * 
+     * @return the cloned object
+     */
+    @Override
+    public Ammo clone() {
+        try {
+            RegularAmmo shallowCopy = (RegularAmmo)super.clone();
+            shallowCopy.resetImmunities();
+            return shallowCopy;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**Method that resets the immunities of the Ammo
+     * For use in cloning
+     */
+    public void resetImmunities() {
+        this.immunityList = new ArrayList<ICollidable>();
+        this.immunityTimers = new HashMap<ICollidable, Integer>();
     }
 
     /**

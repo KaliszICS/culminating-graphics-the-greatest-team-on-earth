@@ -2,6 +2,7 @@ package theGame;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.Node;
+import javafx.scene.image.*;
 
 /**
  * Visual indicator used to mark where an enemy will spawn.
@@ -29,10 +30,8 @@ class SpawnIndicator implements IMovable {
      * @param ypos the y-coordinate where the indicator is displayed
      * @param size the base size used to determine the indicator's dimensions
      */
-    public SpawnIndicator(double xpos, double ypos, double size) {
-        this.indicator = new ImageView(
-            "https://static.vecteezy.com/system/resources/previews/017/178/088/non_2x/red-hazard-warning-sign-on-transparent-background-free-png.png"
-        );
+    public SpawnIndicator(double xpos, double ypos, double size, Image sprite) {
+        this.indicator = new ImageView(sprite);
         this.indicator.setFitHeight(size / 2);
         this.indicator.setFitWidth(size / 2);
         this.timer = 60;

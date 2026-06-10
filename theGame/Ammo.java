@@ -71,9 +71,9 @@ abstract class Ammo extends Item implements ICollidable, Cloneable {
      * @return a cloned copy of this ammunition, or null if cloning fails
      */
     @Override
-    public Object clone() {
+    public Ammo clone() {
         try {
-            return super.clone();
+            return (Ammo)super.clone();
         } catch (Exception e) {
             return null;
         }

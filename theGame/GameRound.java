@@ -1,6 +1,7 @@
 package theGame;
 
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.Node;
 
@@ -33,6 +34,9 @@ public class GameRound {
 
     /**An arraylist of timers to determine when to spawn the enemies */
     private ArrayList<Integer> timers;
+
+    /**An image for the spawn indicator */
+    private Image indicatorIcon = new Image("https://static.vecteezy.com/system/resources/previews/017/178/088/non_2x/red-hazard-warning-sign-on-transparent-background-free-png.png");
 
     /** A constructor that takes in a wave and difficulty value, and sets up the timer, and generates a wave of enemies according to the amount of avaliable enemy points
      * 
@@ -69,7 +73,7 @@ public class GameRound {
             if (this.currentTime == this.timers.get(i) + 60) {
                 double spawnx = Math.random()*1000;
                 double spawny = Math.random()*600;
-                SpawnIndicator temp = new SpawnIndicator(spawnx, spawny, enemies.get(i).getSize());
+                SpawnIndicator temp = new SpawnIndicator(spawnx, spawny, this.enemies.get(i).getSize(), this.indicatorIcon);
                 movables.add(temp);
                 sprites.add(temp.getShape());
                 root.getChildren().add(temp.getShape());
