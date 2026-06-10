@@ -16,6 +16,10 @@ import javafx.scene.*;
 import javafx.scene.image.*;
 import java.util.*;
 
+/**The class that runs the game and handles graphics
+ * @author Eric Wang
+ */
+
 public class HelloFX extends Application {
     final double BOARD_Y = 600;
     final double BOARD_X = 1000;
@@ -33,6 +37,7 @@ public class HelloFX extends Application {
     int wave = 1;
     int diff = 1;
     
+    /**The game, basically */
     @Override
     public void start(Stage stage) {
         Pane titlePane = new Pane();
