@@ -55,6 +55,7 @@ public class DeckBuilder {
         deck.add(ammopool[1].clone());
         deck.add(ammopool[1].clone());
         deck.add(ammopool[4].clone());
+        deck.add(ammopool[4].clone());
         return deck;
     }
 }
