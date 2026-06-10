@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
  * @author Eric Wang
  */
 public class ItemLoader {
-    private static int totalAmmos = 21;
+    private static int totalAmmos = 7;
     private static int totalRelics = 1;
 
     /**Loads every item in the text file according to the number of total items
@@ -41,7 +41,7 @@ public class ItemLoader {
      */
     public static Relic[] loadAllRelics() {
         Relic[] stuff = new Relic[totalRelics];
-        File file = new File("/workspaces/culminating-graphics-the-greatest-team-on-earth/theGame/AmmoPresets.txt");
+        File file = new File("/workspaces/culminating-graphics-the-greatest-team-on-earth/theGame/RelicPresets.txt");
         try {
             Scanner in = new Scanner(file);
             for (int i = 0; i < totalRelics; i++) {
@@ -98,7 +98,7 @@ public class ItemLoader {
         String type = l1[2];
         int rarity = Integer.parseInt(l1[3]);
         String condition = l1[4];
-        String[] effects = l1[5].split(",");
+        String[] effects = l1[5].split(" ");
         String sprite = l1[6];
         return new Relic(rarity, type, name, id, new ArrayList<String>(List.of(effects)), condition, new Image(sprite));
     }

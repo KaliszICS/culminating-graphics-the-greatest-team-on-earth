@@ -10,12 +10,12 @@ public class Shop {
     private final int SLOT_NUMBER = 4;
     private Item[] stock;
     private Ammo[] allAmmo;
+    private Relic[] allRelic;
     //relicloader isnt ready yet so uh yeah
-    private int allrelicssize = 0;
 
     public Shop(Player p) {
-        allAmmo = p.getAllAmmo();
-        int totalSize = allrelicssize + allAmmo.length;
+        this.allAmmo = p.getAllAmmo();
+        this.allRelic = p.getAllRelic();
         this.stock = new Item[this.SLOT_NUMBER];
         this.refresh(p);
     }
@@ -28,13 +28,13 @@ public class Shop {
     public void refresh(Player p) {
         p.changeMoney(-this.refreshNo*10);
         this.refreshNo++;
-        int totalSize = allrelicssize + this.allAmmo.length; 
+        int totalSize = this.allRelic.length + this.allAmmo.length; 
         for (int i = 0; i < this.SLOT_NUMBER; i++) {
             int index = (int)(Math.random() * totalSize);
-            if (index <= allrelicssize-1) {
-                //implement relic load later
+            if (index <= this.allRelic.length-1) {
+                this.stock[i] = this.allRelic[index];
             } else {
-                this.stock[i] = this.allAmmo[index-allrelicssize].clone();
+                this.stock[i] = this.allAmmo[index-allRelic.length].clone();
             }
         }
     }

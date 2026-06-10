@@ -95,7 +95,8 @@ public class Player implements ICollidable {
         this.size = 25;
         this.speed = 7.5;
 
-        this.ammoInv = new ArrayList<>(DeckBuilder.testDeck(ALL_AMMO));
+        this.ammoInv = new ArrayList<Ammo>(DeckBuilder.testDeck(ALL_AMMO));
+        this.relicInv = new ArrayList<Relic>();
 
         this.discard = new ArrayList<>();
         this.reserve = new ArrayList<>();
@@ -184,13 +185,12 @@ public class Player implements ICollidable {
         this.discard.add(ammo);
         ammo.applyEffect(this, "Shoot");
 
-        this.reloadCooldown = (int) (ammo.getFireDelay() * (1 + cooldownMod / 100));
+        this.reloadCooldown = (int) ((double)ammo.getFireDelay() / (1.0 + cooldownMod / 100.0));
         this.targetx -= Math.cos(-Math.atan2(x - this.xpos, y - this.ypos) + Math.PI / 2) * ammo.getRecoil();
         this.targety -= Math.sin(-Math.atan2(x - this.xpos, y - this.ypos) + Math.PI / 2) * ammo.getRecoil();
 
         if (this.weapon.getCartridge().size() == 0) {
-            this.reloadCooldown = (int) (this.weapon.getReloadSpd() * (1 + reloadMod / 100));
-
+            this.reloadCooldown = (int) ((double)this.weapon.getReloadSpd() / (1.0 + reloadMod / 100.0));
             if (!this.weapon.reload(reserve)) {
                 this.refreshReserve();
                 this.weapon.reload(reserve);

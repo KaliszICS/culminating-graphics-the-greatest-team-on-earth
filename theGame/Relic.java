@@ -38,6 +38,16 @@ public class Relic extends Item {
         this.sprite = sprite;
     }
 
+    @Override
+    public Relic clone() {
+        try {
+            return (Relic)super.clone();
+        } catch (Exception e) {
+            System.out.println("why are you stupid");
+            return null;
+        }
+    }
+
     /**
      * Applies this relic's effects to the player if the trigger condition matches.
      * Each effect is expected to be in the format "Effect_Value", where Effect determines the stat to modify and Value is a numeric modifier.

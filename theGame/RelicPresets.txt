@@ -1,3 +1,3 @@
-0,Coffee,Stat Relic,3,Start,Spd_+5 Rld_+5 Cd_+5 Hp_-3,https://img.icons8.com/color/1200/java-coffee-cup-logo.jpg
+0,Coffee,Stat Relic,3,Start,Spd_+10 Rld_+10 Cd_+10 Hp_-3,https://img.icons8.com/color/1200/java-coffee-cup-logo.jpg
 
 id, name, type, rarity, condition, effects, sprite

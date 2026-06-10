@@ -177,6 +177,8 @@ public class HelloFX extends Application {
         refresh.setScaleX(1.5);
         shopPane.getChildren().add(refresh);
 
+        // p.setMoney(10000);
+
         AnimationTimer shopAnim = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -262,8 +264,10 @@ public class HelloFX extends Application {
                     p.changeMoney(-itemCost);
                     if (shop.getStock()[0] instanceof Ammo) {
                         p.getAmmoInventory().add((Ammo)shop.getStock()[0]);
-                        shop.getStock()[0] = null;
+                    } else if (shop.getStock()[0] instanceof Relic) {
+                        p.getRelicInventory().add((Relic)shop.getStock()[0]);
                     }
+                    shop.getStock()[0] = null;
                 } else {
                     moneyFlashTimer = 60;
                 }
@@ -276,8 +280,10 @@ public class HelloFX extends Application {
                     p.changeMoney(-itemCost);
                     if (shop.getStock()[1] instanceof Ammo) {
                         p.getAmmoInventory().add((Ammo)shop.getStock()[1]);
-                        shop.getStock()[1] = null;
+                    } else if (shop.getStock()[1] instanceof Relic) {
+                        p.getRelicInventory().add((Relic)shop.getStock()[1]);
                     }
+                    shop.getStock()[1] = null;
                 } else {
                     moneyFlashTimer = 60;
                 }
@@ -290,8 +296,10 @@ public class HelloFX extends Application {
                     p.changeMoney(-itemCost);
                     if (shop.getStock()[2] instanceof Ammo) {
                         p.getAmmoInventory().add((Ammo)shop.getStock()[2]);
-                        shop.getStock()[2] = null;
+                    } else if (shop.getStock()[2] instanceof Relic) {
+                        p.getRelicInventory().add((Relic)shop.getStock()[2]);
                     }
+                    shop.getStock()[2] = null;
                 } else {
                     moneyFlashTimer = 60;
                 }
@@ -304,8 +312,10 @@ public class HelloFX extends Application {
                     p.changeMoney(-itemCost);
                     if (shop.getStock()[3] instanceof Ammo) {
                         p.getAmmoInventory().add((Ammo)shop.getStock()[3]);
-                        shop.getStock()[3] = null;
+                    } else if (shop.getStock()[3] instanceof Relic) {
+                        p.getRelicInventory().add((Relic)shop.getStock()[3]);
                     }
+                    shop.getStock()[3] = null;
                 } else {
                     moneyFlashTimer = 60;
                 }
@@ -395,6 +405,7 @@ public class HelloFX extends Application {
         EventHandler<ActionEvent> gameAction = (e -> {
             root.getChildren().clear();
             p.reset();
+            p.activateAllRelics("Start");
             movingUp = false;
             movingDown = false;
             movingLeft = false;
@@ -619,7 +630,7 @@ public class HelloFX extends Application {
                     p.setTargetX(p.getTargetX() + horiz);
                     p.setTargetY(p.getTargetY() + vert);
                     if (round.getCurrentTime() <= 0) {
-                        wave += 10;
+                        wave += 1;
                         shop = new Shop(p);
                         stage.setScene(shopScene);
                         shopAnim.start();
