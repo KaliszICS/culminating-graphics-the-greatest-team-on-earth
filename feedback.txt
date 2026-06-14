@@ -1,0 +1,16 @@
+K(30%): 100
+I(30%): 90
+C(10%): 100
+A(30%): 90
+94%
+
+Having a border around your game area would help (or fix it so the window can't be enlarged).  It is hard to tell where the edges end if you make the window bigger.
+
+There appears to be a cooldown on attacks? but there is no graphic or animation to help you know this.
+There should be some instructions at the beginning to explain the game and the controls (was not aware you could move with arrow keys until trying it a couple times)
+
+Great use of poly morphism for game assets.
+
+I would use more functions especially in your main method to help divide up code and make it easier to edit and read.
+
+Having multiple scenes also would have made that section easier to split between the welcome screen, game play and shop.
